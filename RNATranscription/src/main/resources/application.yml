@@ -1,0 +1,25 @@
+spring:
+  datasource:
+     driver-class-name: com.mysql.jdbc.Driver
+     url: jdbc:mysql://39.108.52.95:3306/rna_transcription?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+     username: ldchao
+     password: 123456
+  jpa:
+     hibernate:
+      ddl-auto: none
+     show-sql: true
+     database-platform: org.hibernate.dialect.MySQL5Dialect
+  application:
+     name: FileUpload
+  thymeleaf:
+     mode: LEGACYHTML5
+     cache: false
+  http:
+    multipart:
+      max-file-size: 3072Mb
+      max-request-size: 3072Mb
+
+server:
+  port: 8080
+  session:
+    timeout: 86400
