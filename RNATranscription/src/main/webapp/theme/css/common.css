@@ -1,0 +1,47 @@
+/* Created by L.H.S on 2017/8/16.
+ * styles in common
+ */
+
+html, body {
+    height: 100%;
+    background-color: #1d2939;
+}
+
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0 !important;
+}
+
+.navbar-default {
+    background-color: #fff;
+}
+
+#leftnav {
+    width: 200px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#middle {
+    height: calc(100% - 52px);
+}
+
+#content {
+    width: calc(100% - 200px);
+    min-height: 100%;
+    margin: 0 0 0 -4px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: #e0e0e0;
+}
+
+a {
+    color: #333;
+    cursor: pointer;
+}
+
+a:hover,
+a:focus {
+    color: #097adc;
+    text-decoration: none;
+}
