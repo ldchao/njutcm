@@ -9,7 +9,7 @@ define([], function () {
     var leftnavCtrl = ['$scope', '$state', function ($scope, $state) {
 
         $scope.navList = [
-            {state: 'application', label: '我的应用', icon: 'fa-microsoft'},
+            {state: 'application', label: '我的应用', icon: 'fa-boxes'},
             {state: 'upload', label: '上传数据', icon: 'fa-cloud-upload-alt'},
             {state: 'task', label: '任务列表', icon: 'fa-list'}
         ];

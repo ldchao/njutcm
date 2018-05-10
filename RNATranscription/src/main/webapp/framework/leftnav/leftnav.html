@@ -1,7 +1,41 @@
 <!-- Created by L.H.S on 2018/5/9. -->
 
-<ul>
+<ul class="left_bar">
     <li ng-repeat="item in navList track by $index">
-        {{item.label}}
+        <a>
+            <i class="fa" ng-class="item.icon"></i>
+            {{item.label}}
+        </a>
     </li>
 </ul>
+
+<style>
+    ul.left_bar {
+        padding-left: 15px;
+        padding-top: 20px;
+    }
+
+    ul.left_bar li {
+        display: block;
+    }
+
+    ul.left_bar li a {
+        color: #8f939e;
+        padding: 10px 10px;
+        display: block;
+        border-radius: 20px;
+        transition: all .3s cubic-bezier(.175,.885,.32,1);
+    }
+
+    ul.left_bar li a:hover,
+    ul.left_bar li a.active {
+        background-color: #fff;
+        color: #1d2939;
+    }
+
+    ul.left_bar li a i {
+        display: inline-block;
+        width: 25px;
+    }
+
+</style>

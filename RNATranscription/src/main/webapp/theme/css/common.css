@@ -37,6 +37,7 @@ html, body {
 
 a {
     color: #333;
+    cursor: pointer;
 }
 
 a:hover {
