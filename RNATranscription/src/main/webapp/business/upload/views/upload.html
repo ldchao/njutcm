@@ -1,10 +1,10 @@
 <!-- Created by L.H.S on 2017/8/14. -->
 
-<div class="upload_table_container">
+<div class="table_container">
     <button class="btn btn-primary">上传文件</button>
 
     <div class="input-group">
-        <input type="text" class="form-control" placeholder="请输入关键字搜索..."
+        <input type="text" class="form-control" placeholder="请输入关键字（文件名、类型）搜索..."
                ng-model="key" ng-change="search()">
         <span class="input-group-btn">
         <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<div class="upload_table_container">
+<div class="table_container">
     <table class="table table-striped table-hover">
         <thead>
         <th>文件名</th>
@@ -42,10 +42,6 @@
 </div>
 
 <style>
-    .upload_table_container {
-        margin: 15px 15px;
-    }
-
     .input-group {
         width: 300px;
         float: right;

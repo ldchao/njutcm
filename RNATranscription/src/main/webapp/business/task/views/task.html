@@ -1,5 +1,60 @@
 <!-- Created by L.H.S on 2017/8/14. -->
 
-<blockquote>
-    task
-</blockquote>
+<div class="table_container">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="请输入关键字（任务编号、应用名、执行结果）搜索..."
+               ng-model="key" ng-change="search()">
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+      </span>
+    </div>
+</div>
+
+<div class="table_container">
+    <table class="table table-striped table-hover">
+        <thead>
+        <th>任务编号</th>
+        <th>应用名</th>
+        <th>执行时间</th>
+        <th>执行结果</th>
+        <th>下载文件</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in taskList track by $index">
+            <td>{{item.id}}</td>
+            <td>{{item.app}}</td>
+            <td>{{item.time}}</td>
+            <td><i class="fa" ng-class="{'fa-check-circle':item.result=='success',
+            'fa-times-circle':item.result=='fail', 'fa-play-circle':item.result=='process'}"></i>
+                <span>{{item.result}}</span>
+            </td>
+            <td>
+                <a class="blue" ng-click="download(item)">下载</a>
+            </td>
+        </tr>
+        <tr ng-show="taskList.length==0||!taskList">
+            <td colspan="5" class="no_data">
+                <i class="fa fa-info-circle"></i>
+                暂无数据
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .fa-check-circle,
+    .fa-check-circle + span {
+        color: #10a210;
+    }
+
+    .fa-times-circle,
+    .fa-times-circle + span {
+        color: #d22525;
+    }
+
+    .fa-play-circle,
+    .fa-play-circle + span {
+        color: #1587e8;
+    }
+</style>

@@ -55,6 +55,15 @@ a.red:focus {
     color: #c11616;
 }
 
+a.blue {
+    color: #097adc;
+}
+
+a.blue:hover,
+a.blue:focus {
+    color: #0b508c;
+}
+
 .breadcrumb {
     border-radius: 0;
 }
@@ -113,4 +122,8 @@ a.red:focus {
 
 .no_data {
     color: #999 !important;
+}
+
+.table_container {
+    margin: 15px 15px;
 }
