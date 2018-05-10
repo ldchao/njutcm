@@ -80,7 +80,7 @@ $(function () {
             '<h4 class="info">' + file.name + '<button type="button" fileId="' + file.id + '" class="btn btn-danger btn-delete"><span class="glyphicon glyphicon-trash"></span></button></h4>' +
             '<p class="state">正在计算文件MD5...请等待计算完毕后再点击上传！</p><input type="text" id="s_WU_FILE_'+flie_count+'" />' +
             '</div>');
-        console.info("id=file_"+flie_count);
+        // console.info("id=file_"+flie_count);
         flie_count++;
 
         //删除要上传的文件

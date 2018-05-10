@@ -64,6 +64,15 @@ a.blue:focus {
     color: #0b508c;
 }
 
+button a {
+    color: #fff;
+}
+
+button a:hover,
+button a:focus {
+    color: #fff;
+}
+
 .breadcrumb {
     border-radius: 0;
 }
