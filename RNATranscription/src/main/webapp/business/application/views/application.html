@@ -1,5 +1,60 @@
 <!-- Created by L.H.S on 2017/8/14. -->
 
-<blockquote>
-    application
-</blockquote>
+<div>
+
+    <div class="app_each_app" ng-repeat="item in appList track by $index">
+        <div class="app_each_title">
+            <img ng-src="{{'/theme/img/'+item.icon}}">
+            <label ng-click="getDetail(item)"><a>{{item.name}}</a></label>
+            <span class="label label-info">{{item.type}}</span>
+        </div>
+        <div class="app_each_info">
+            [简介] {{item.brief}}
+        </div>
+    </div>
+
+
+</div>
+
+<style>
+    .app_each_app {
+        width: 250px;
+        height: 160px;
+        background-color: #fff;
+        padding: 10px 10px;
+        display: inline-block;
+        vertical-align: top;
+        margin: 15px 15px;
+    }
+
+    .app_each_title {
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #d8d8d8;
+    }
+
+    .app_each_title img {
+        width: 40px;
+        height: 40px;
+        margin: 5px 0;
+    }
+
+    .app_each_title span.label {
+        float: right;
+        line-height: 25px;
+        padding: 0 10px;
+        margin: 12.5px 0;
+        font-size: 12px;
+    }
+
+    .app_each_title label {
+        margin-left: 5px;
+        font-size: 16px;
+    }
+
+    .app_each_info {
+        padding: 10px 0;
+        color: #999;
+    }
+
+</style>

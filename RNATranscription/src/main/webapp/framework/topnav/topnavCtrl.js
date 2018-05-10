@@ -6,9 +6,33 @@ define([], function () {
 
     'use strict';
 
-    var topnavCtrl = ['$scope', '$state', function ($scope, $state) {
+    var topnavCtrl = ['$scope', '$state', '$uibModal', function ($scope, $state, $uibModal) {
+
         $scope.menus = {
-            url: 'framework/topnav/topnav.tpl.html'
+            url: 'framework/topnav/topnav.html'
+        };
+
+        $scope.loginModal = function (type) {
+
+            var loginModal = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'framework/login/login.html',
+                controller: 'loginCtrl',
+                resolve: {
+                    type: function () {
+                        return type;
+                    }
+                }
+            });
+
+            loginModal.result.then(function (data) {
+                if (type == '登录') {
+
+                } else {
+
+                }
+            });
         };
 
         // 判断Menu的子状态激活时，是否需要隶属于其父状态

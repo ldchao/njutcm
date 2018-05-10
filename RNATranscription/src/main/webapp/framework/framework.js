@@ -8,13 +8,15 @@
  */
 
 define(['ui-router/angular-ui-router',
+        'framework/commonService',
         'framework/topnav/topnavCtrl',
         'framework/leftnav/leftnavCtrl',
+        'framework/login/loginCtrl',
         'business/application/configures/appRouterConfig',
         'business/upload/configures/uploadRouterConfig',
         'business/task/configures/taskRouterConfig'
     ],
-    function (router, topnavCtrl, leftnavCtrl,
+    function (router, commonService, topnavCtrl, leftnavCtrl, loginCtrl,
               appRouterConfig, uploadRouterConfig, taskRouterConfig) {
         'use strict';
 
@@ -31,8 +33,11 @@ define(['ui-router/angular-ui-router',
 
         var framework = angular.module('framework', dependency);
 
-        framework.controller('topnavCtrl', topnavCtrl); // 顶部菜单控制器
-        framework.controller('leftnavCtrl', leftnavCtrl); // 顶部菜单控制器
+        framework.service('commonService', commonService);
+
+        framework.controller('topnavCtrl', topnavCtrl);
+        framework.controller('leftnavCtrl', leftnavCtrl);
+        framework.controller('loginCtrl', loginCtrl);
 
         // 初始跳转至首页模块
         framework.config(['$urlRouterProvider', function ($urlRouterProvider) {

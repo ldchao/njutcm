@@ -1,0 +1,29 @@
+<!-- Created by L.H.S on 2018/5/7. -->
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{modalType}}</h3>
+    <div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
+</div>
+
+<div class="modal-body" id="modal-body">
+
+    <div class="form_line">
+        <label>用户名</label>
+        <input type="text" class="form-control" ng-model="data.username">
+    </div>
+
+    <div class="form_line">
+        <label>密码</label>
+        <input type="password" class="form-control" ng-model="data.pwd">
+    </div>
+
+    <div class="form_line" ng-if="modalType=='注册'">
+        <label>确认密码</label>
+        <input type="password" class="form-control" ng-model="data.pwd2">
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">{{modalType}}</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+</div>

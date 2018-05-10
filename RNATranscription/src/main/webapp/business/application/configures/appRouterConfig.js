@@ -15,6 +15,14 @@ define(['lazy-load/lazyLoad'],
             scripts: {
                 controllers: ['business/application/controllers/appCtrl']
             }
+        }, {
+            name: 'appDetail',
+            url: '/app-detail/:id',
+            templateUrl: 'business/application/views/appDetail.html',
+            controller: 'appDetailCtrl',
+            scripts: {
+                controllers: ['business/application/controllers/appDetailCtrl']
+            }
         }];
 
         var appModule = angular.module('application.config', ['ui.router']);
@@ -22,7 +30,7 @@ define(['lazy-load/lazyLoad'],
         // stateConfig属性配置路由状态基本信息；urlMatch属性配置异常url对应的url路径
         appModule.StateConfig({
             stateConfig: configArr,
-            urlMatch: [['/application/', '/application'], ['/application', '/application']]
+            urlMatch: [['/application', '/application'], ['/application', '/application']]
         });
 
         return appModule;
