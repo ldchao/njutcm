@@ -12,11 +12,12 @@ define(['ui-router/angular-ui-router',
         'framework/topnav/topnavCtrl',
         'framework/leftnav/leftnavCtrl',
         'framework/login/loginCtrl',
+        'framework/confirm/confirmCtrl',
         'business/application/configures/appRouterConfig',
         'business/upload/configures/uploadRouterConfig',
         'business/task/configures/taskRouterConfig'
     ],
-    function (router, commonService, topnavCtrl, leftnavCtrl, loginCtrl,
+    function (router, commonService, topnavCtrl, leftnavCtrl, loginCtrl, confirmCtrl,
               appRouterConfig, uploadRouterConfig, taskRouterConfig) {
         'use strict';
 
@@ -38,6 +39,8 @@ define(['ui-router/angular-ui-router',
         framework.controller('topnavCtrl', topnavCtrl);
         framework.controller('leftnavCtrl', leftnavCtrl);
         framework.controller('loginCtrl', loginCtrl);
+
+        framework.controller('confirmCtrl', confirmCtrl);
 
         // 初始跳转至首页模块
         framework.config(['$urlRouterProvider', function ($urlRouterProvider) {

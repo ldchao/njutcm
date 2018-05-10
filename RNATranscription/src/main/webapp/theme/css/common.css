@@ -32,7 +32,7 @@ html, body {
     margin: 0 0 0 -4px;
     display: inline-block;
     vertical-align: top;
-    background-color: #e0e0e0;
+    background-color: #fff;
 }
 
 a {
@@ -44,6 +44,15 @@ a:hover,
 a:focus {
     color: #097adc;
     text-decoration: none;
+}
+
+a.red {
+    color: #ec4646;
+}
+
+a.red:hover,
+a.red:focus {
+    color: #c11616;
 }
 
 .breadcrumb {
@@ -87,4 +96,21 @@ a:focus {
 
 .message.error {
     background-color: #ffcfcf;
+}
+
+/* 表格 */
+.table-hover > tbody > tr:hover {
+    background-color: #e4f6fb !important;
+}
+
+.modal-title {
+    color: #00a2ca;
+}
+
+.modal-title i {
+    margin-right: 5px;
+}
+
+.no_data {
+    color: #999 !important;
 }
