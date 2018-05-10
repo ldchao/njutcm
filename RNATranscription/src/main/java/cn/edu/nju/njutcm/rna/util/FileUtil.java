@@ -1,6 +1,6 @@
 package cn.edu.nju.njutcm.rna.util;
 
-import cn.edu.nju.ldchao.fileupload.entity.UploadInfo;
+import cn.edu.nju.njutcm.rna.entity.UploadInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;

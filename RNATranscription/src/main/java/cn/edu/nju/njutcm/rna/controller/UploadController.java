@@ -1,7 +1,7 @@
 package cn.edu.nju.njutcm.rna.controller;
 
-import cn.edu.nju.ldchao.fileupload.util.FileUtil;
-import cn.edu.nju.ldchao.fileupload.vo.UploadVO;
+import cn.edu.nju.njutcm.rna.util.FileUtil;
+import cn.edu.nju.njutcm.rna.vo.UploadVO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
