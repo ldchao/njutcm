@@ -1,12 +1,17 @@
 package cn.edu.nju.njutcm.rna.controller;
 
+import cn.edu.nju.njutcm.rna.model.FileEntity;
+import cn.edu.nju.njutcm.rna.service.FileService;
 import cn.edu.nju.njutcm.rna.util.FileUtil;
 import cn.edu.nju.njutcm.rna.vo.UploadVO;
+import cn.edu.nju.njutcm.rna.vo.UserVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -15,6 +20,10 @@ import java.util.Date;
  */
 @RestController
 public class UploadController {
+
+    @Autowired
+    FileService fileService;
+
     /**
      *
      * @Description:
@@ -43,36 +52,28 @@ public class UploadController {
     @RequestMapping(value = "/BigFileUp")
     public String fileUpload(String guid, String md5value, String chunks, String chunk, String id, String name,
                              String type, String lastModifiedDate, String size, MultipartFile file,HttpServletRequest request) {
-        System.out.println("guid:"+guid+",md5value:"+md5value+",chunks:"+chunks+",chunk:"+chunk+
-                ",id:"+id+",name:"+name+",type:"+type+",lastModifiedDate:"+lastModifiedDate+",size:"+size);
-        String fileName;
         UploadVO result=new UploadVO();
         try {
-            int index;
-            String uploadFolderPath = FileUtil.getRealPath(request);
-
-            String mergePath = uploadFolderPath + "\\fileDate\\" + id + "\\";
             String ext = name.substring(name.lastIndexOf("."));
 
+            String destPath = null;
             // 判断文件是否分块
             if (chunks != null && chunk != null) {
-                index = Integer.parseInt(chunk);
-                fileName = String.valueOf(index) + ext;
-                // 将文件分块保存到临时文件夹里，便于之后的合并文件
-                FileUtil.saveFile(mergePath, fileName, file, request);
-                // 验证所有分块是否上传成功，成功的话进行合并
-                FileUtil.Uploaded(md5value, guid, chunk, chunks, mergePath, fileName, ext, request);
+                destPath = FileUtil.savaFileInBlock(guid,md5value,chunks,chunk,ext, file, id, request);
+
             } else {
-                SimpleDateFormat year = new SimpleDateFormat("yyyy");
-                SimpleDateFormat m = new SimpleDateFormat("MM");
-                SimpleDateFormat d = new SimpleDateFormat("dd");
-                Date date = new Date();
-                String destPath = uploadFolderPath + "\\fileDate\\" + "video" + "\\" + year.format(date) + "\\"
-                        + m.format(date) + "\\" + d.format(date) + "\\";// 文件路径
-                String newName = System.currentTimeMillis() + ext;// 文件新名称
-                // fileName = guid + ext;
-                // 上传文件没有分块的话就直接保存目标目录
-                FileUtil.saveFile(destPath, newName, file, request);
+                destPath = FileUtil.savaFileNotInBlock(ext,file,request);
+            }
+            if(destPath!=null){
+                FileEntity fileEntity=new FileEntity();
+                fileEntity.setFileName(name);
+//                UserVO userVO = (UserVO) request.getSession().getAttribute("User");
+//                fileEntity.setUser(userVO.getUsername());
+                fileEntity.setUser("test");
+                fileEntity.setSize(Double.valueOf(size));
+                fileEntity.setSavepath(destPath);
+                fileEntity.setUploadAt(new Timestamp(System.currentTimeMillis()));
+                fileService.addFile(fileEntity);
             }
 
         } catch (Exception ex) {
@@ -89,7 +90,7 @@ public class UploadController {
 
     @RequestMapping(value = "/blockIsExist")
     public Boolean blockIsExist(String md5value, String chunk) {
-        return FileUtil.isNotExist(md5value,chunk);
+        return FileUtil.isExist(md5value,chunk);
     }
 
 

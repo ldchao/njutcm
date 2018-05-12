@@ -1,7 +1,7 @@
 package cn.edu.nju.njutcm.rna.service.serviceimpl;
 
 import cn.edu.nju.njutcm.rna.dao.UserDao;
-import cn.edu.nju.njutcm.rna.model.User;
+import cn.edu.nju.njutcm.rna.model.UserEntity;
 import cn.edu.nju.njutcm.rna.service.UserService;
 import cn.edu.nju.njutcm.rna.util.GetAddress;
 import cn.edu.nju.njutcm.rna.util.PasswordEncryption;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     private static Log logger = LogFactory.getLog(UserServiceImpl.class);
 
     public UserVO login(String username, String password, String ip) {
-        User user = userDao.findOne(username);
+        UserEntity user = userDao.findOne(username);
         UserVO userVO = new UserVO();
         if (user == null) {
             userVO.setLoginMessage("no_user");
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String changePassword(String username, String oldPassword, String newPassword) {
-        User user = userDao.findOne(username);
+        UserEntity user = userDao.findOne(username);
         String salt = user.getSalt();
         String encryptedPassword = user.getPassword();
         boolean result = false;
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
         if (userDao.exists(username)) {
             return "username_existed";
         }
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setUsername(username);
         try {
             String salt = PasswordEncryption.generateSalt();
@@ -139,8 +139,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserVO> getAllUser() {
         List<UserVO> userVOS = new ArrayList<UserVO>();
-        List<User> users = userDao.findAll();
-        for (User user : users) {
+        List<UserEntity> users = userDao.findAll();
+        for (UserEntity user : users) {
             if (user.getUsername().equals("admin")) {
                 continue;
             }

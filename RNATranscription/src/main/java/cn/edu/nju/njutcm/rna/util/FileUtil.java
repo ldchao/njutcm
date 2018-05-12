@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -19,107 +20,6 @@ import java.util.stream.Collectors;
  * Created by ldchao on 2018/5/7.
  */
 public class FileUtil {
-
-
-    public void upload(HttpServletRequest request, MultipartFile[] myfiles, String fileT, String modelCode)
-            throws Exception {
-//            DataFile dataFile = new DataFile();
-
-        if (myfiles.length > 0) {
-            String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-            System.out.println("1--" + realPath);
-            realPath = realPath.substring(0, realPath.length() - 1);
-            System.out.println("2--" + realPath);
-            int aString = realPath.lastIndexOf(File.separator);
-            System.out.println("3--" + aString);
-
-            for (int i = 0; i < myfiles.length; i++) {
-
-                int type = myfiles[i].getOriginalFilename().lastIndexOf(".");
-                String fileType = myfiles[i].getOriginalFilename().substring(type,
-                        myfiles[i].getOriginalFilename().length());
-
-                SimpleDateFormat year = new SimpleDateFormat("yyyy");
-                SimpleDateFormat m = new SimpleDateFormat("MM");
-                SimpleDateFormat d = new SimpleDateFormat("dd");
-                Date date = new Date();
-
-                realPath = realPath.substring(0, aString) + File.separator + "fileDate" + File.separator + fileT + File.separator + year.format(date) + File.separator
-                        + m.format(date) + File.separator + d.format(date) + File.separator;
-                File folder = new File(realPath);
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                }
-
-                String newName = System.currentTimeMillis() + fileType;
-                realPath = realPath + modelCode + newName;
-
-                myfiles[i].transferTo(new File(realPath));
-
-//                    dataFile.setOldName(myfiles[i].getOriginalFilename());
-//                    dataFile.setFileUrl(File.separator+"fileDate" + File.separator + fileT + File.separator + year.format(date) + File.separator + m.format(date) + File.separator
-//                            + d.format(date));
-//                    dataFile.setNewName(modelCode + newName);
-            }
-        }
-//            return dataFile;
-    }
-
-    public void upload(HttpServletRequest request, MultipartFile myfile, String fileT, String modelCode)
-            throws Exception {
-//            DataFile dataFile = new DataFile();
-        String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-        System.out.println("1--" + realPath);
-        realPath = realPath.substring(0, realPath.length() - 1);
-        System.out.println("2--" + realPath);
-        int aString = realPath.lastIndexOf(File.separator);
-        System.out.println("3--" + aString);
-
-        int type = myfile.getOriginalFilename().lastIndexOf(".");
-        String fileType = myfile.getOriginalFilename().substring(type, myfile.getOriginalFilename().length());
-
-        SimpleDateFormat year = new SimpleDateFormat("yyyy");
-        SimpleDateFormat m = new SimpleDateFormat("MM");
-        SimpleDateFormat d = new SimpleDateFormat("dd");
-        Date date = new Date();
-
-        realPath = realPath.substring(0, aString) + File.separator + "fileDate" + File.separator + fileT + File.separator + year.format(date) + File.separator
-                + m.format(date) + File.separator + d.format(date) + File.separator;
-        File folder = new File(realPath);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        String newName = System.currentTimeMillis() + fileType;
-        realPath = realPath + modelCode + newName;
-
-        myfile.transferTo(new File(realPath));
-
-//            dataFile.setOldName(myfile.getOriginalFilename());
-//            dataFile.setFileUrl(
-//                    File.separator+"fileDate" +File.separator + fileT + File.separator + year.format(date) + File.separator + m.format(date) + File.separator + d.format(date));
-//            dataFile.setNewName(modelCode + newName);
-//            return dataFile;
-    }
-
-    public static void deleteFile(HttpServletRequest request, List<String> filePath) {
-        String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-        realPath = realPath.substring(0, realPath.length() - 1);
-        int aString = realPath.lastIndexOf(File.separator);
-        realPath = realPath.substring(0, aString);
-
-        if (filePath != null && !filePath.isEmpty()) {
-            for (String path : filePath) {
-                File file = new File(realPath + path);
-                System.out.println("path==" + realPath + path);
-                if (file.exists()) {
-                    file.delete();
-                    System.out.println("成功删除文件");
-                }
-            }
-        }
-
-    }
 
     /**
      * @param request
@@ -135,26 +35,14 @@ public class FileUtil {
 //            return realPath;
     }
 
-    public static boolean saveFile(String savePath, String fileFullName, MultipartFile file, HttpServletRequest request)
+    private static boolean saveFile(String savePath, String fileFullName, MultipartFile file, HttpServletRequest request)
             throws Exception {
-        File uploadDirectory = new File(getRealPath(request));
         byte[] data = readInputStream(file.getInputStream());
         // new一个文件对象用来保存图片，默认保存当前工程根目录
         File uploadFile = new File(savePath + fileFullName);
         // 判断文件夹是否存在，不存在就创建一个
-        File fileDirectory = new File(savePath);
-        synchronized (uploadDirectory) {
-            if (!uploadDirectory.exists()) {
-                if (!uploadDirectory.mkdirs()) {
-                    throw new Exception("保存文件的父文件夹创建失败！路径为：" + savePath);
-                }
-            }
-            if (!fileDirectory.exists()) {
-                if (!fileDirectory.mkdirs()) {
-                    throw new Exception("文件夹创建失败！路径为：" + savePath);
-                }
-            }
-        }
+
+        createDir(savePath);
 
         // 创建输出流
         try (FileOutputStream outStream = new FileOutputStream(uploadFile)) {// 写入数据
@@ -187,10 +75,10 @@ public class FileUtil {
 
     private final static List<UploadInfo> uploadInfoList = new ArrayList<>();
 
-    public static void Uploaded(String md5, String guid, String chunk, String chunks, String uploadFolderPath,
+    private static String Uploaded(String md5, String guid, String chunk, String chunks, String uploadFolderPath,
                                 String fileName, String ext, HttpServletRequest request) throws Exception {
         synchronized (uploadInfoList) {
-            if ((md5 != null && !md5.equals("")) && (chunks != null && !chunks.equals("")) && !isNotExist(md5, chunk)) {
+            if ((md5 != null && !md5.equals("")) && (chunks != null && !chunks.equals("")) && !isExist(md5, chunk)) {
                 uploadInfoList.add(new UploadInfo(md5, chunks, chunk, uploadFolderPath, fileName, ext));
             }
         }
@@ -198,12 +86,13 @@ public class FileUtil {
         int chunksNumber = Integer.parseInt(chunks);
 
         if (allUploaded) {
-            mergeFile(chunksNumber, ext, guid, uploadFolderPath, request);
+            return mergeFile(chunksNumber, ext, guid, uploadFolderPath, request);
         }
+        return null;
     }
 
     //判断在uploadInfoList是否有存在MD5和chunk都相同的元素
-    public static boolean isNotExist(final String md5, final String chunk) {
+    public static boolean isExist(final String md5, final String chunk) {
         boolean flag = false;
         for (UploadInfo uploadInfo : uploadInfoList) {
             if (uploadInfo.getChunk().equals(chunk) && uploadInfo.getMd5().equals(md5)) {
@@ -236,18 +125,13 @@ public class FileUtil {
     }
 
     @SuppressWarnings("resource")
-    private static void mergeFile(int chunksNumber, String ext, String guid, String uploadFolderPath,
+    private static String mergeFile(int chunksNumber, String ext, String guid, String uploadFolderPath,
                                   HttpServletRequest request) {
-        SimpleDateFormat year = new SimpleDateFormat("yyyy");
-        SimpleDateFormat m = new SimpleDateFormat("MM");
-        SimpleDateFormat d = new SimpleDateFormat("dd");
-        Date date = new Date();
         /* 合并输入流 */
         String mergePath = uploadFolderPath;
 
-        String destPath = getRealPath(request) + File.separator + "fileDate" + File.separator + "video" + File.separator + year.format(date) + File.separator
-                + m.format(date) + File.separator + d.format(date) + File.separator;// 文件路径
-        String newName = System.currentTimeMillis() + ext;// 文件新名称
+        String destPath = getDestPath(request);// 文件路径
+        String newName = UUID.randomUUID().toString().replaceAll("-", "") + ext;// 文件新名称
 
         SequenceInputStream s;
         InputStream s1;
@@ -267,12 +151,11 @@ public class FileUtil {
             // 删除保存分块文件的文件夹
             deleteFolder(mergePath);
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        return destPath + newName;
 
     }
 
@@ -293,19 +176,7 @@ public class FileUtil {
 
     private static void saveStreamToFile(SequenceInputStream inputStream, String filePath, String newName)
             throws Exception {
-        File fileDirectory = new File(filePath);
-        synchronized (fileDirectory) {
-            if (!fileDirectory.exists()) {
-                if (!fileDirectory.mkdirs()) {
-                    throw new Exception("保存文件的父文件夹创建失败！路径为：" + fileDirectory);
-                }
-            }
-            if (!fileDirectory.exists()) {
-                if (!fileDirectory.mkdirs()) {
-                    throw new Exception("文件夹创建失败！路径为：" + fileDirectory);
-                }
-            }
-        }
+        createDir(filePath);
 
 		/* 创建输出流，写入数据，合并分块 */
         OutputStream outputStream = new FileOutputStream(filePath + newName);
@@ -325,58 +196,48 @@ public class FileUtil {
         }
     }
 
-    /**
-     * @param request
-     * @param sliceFile 分片文件
-     * @param name      文件名称
-     * @param dirType   文件夹类型 如video/audio
-     * @param fileExt   文件扩展名 如.mp4/.avi  ./mp3
-     * @return
-     * @Description: 分片文件追加
-     */
-    public static String randomWrite(HttpServletRequest request, byte[] sliceFile, String name, String dirType, String fileExt) {
-        try {
-
-            /** 以读写的方式建立一个RandomAccessFile对象 **/
-            //获取相对路径/home/gzxiaoi/apache-tomcat-8.0.45/webapps
-            String realPath = getRealPath(request);
-            //拼接文件保存路径 /fileDate/video/2017/08/09  如果没有该文件夹，则创建
-            String savePath = getSavePath(realPath, dirType);
-            // String realName = UUID.randomUUID().toString().replace("-", "");
-            String realName = name;
-            String saveFile = realPath + savePath + realName + fileExt;
-            RandomAccessFile raf = new RandomAccessFile(saveFile, "rw");
-            // 将记录指针移动到文件最后
-            raf.seek(raf.length());
-            raf.write(sliceFile);
-            return savePath;
-        } catch (Exception e) {
-            e.printStackTrace();
+    private static void createDir(String savePath) throws Exception{
+        File fileDirectory = new File(savePath);
+        synchronized (fileDirectory) {
+            if (!fileDirectory.exists()) {
+                if (!fileDirectory.mkdirs()) {
+                    throw new Exception("保存文件的父文件夹创建失败！路径为：" + fileDirectory);
+                }
+            }
+            if (!fileDirectory.exists()) {
+                if (!fileDirectory.mkdirs()) {
+                    throw new Exception("文件夹创建失败！路径为：" + fileDirectory);
+                }
+            }
         }
-        return null;
-
     }
 
-    /**
-     * @param realPath 相对路径 ，如   /home/gzxiaoi/apache-tomcat-8.0.45/webapps
-     * @param fileType 文件类型 如： images/video/audio用于拼接文件保存路径，区分音视频
-     * @return
-     * @Description: 获取文件保存的路径，如果没有该目录，则创建
-     */
-    public static String getSavePath(String realPath, String fileType) {
-        SimpleDateFormat year = new SimpleDateFormat("yyyy");
-        SimpleDateFormat m = new SimpleDateFormat("MM");
-        SimpleDateFormat d = new SimpleDateFormat("dd");
+    public static String savaFileInBlock(String guid, String md5value, String chunks, String chunk, String ext, MultipartFile file, String id,
+                                         HttpServletRequest request) throws Exception{
+
+        String mergePath = getRealPath(request) + "\\fileDate\\" + id + "\\";
+        // 将文件分块保存到临时文件夹里，便于之后的合并文件
+        String fileName = chunk + ext;
+        saveFile(mergePath, fileName, file, request);
+        // 验证所有分块是否上传成功，成功的话进行合并
+        return Uploaded(md5value, guid, chunk, chunks, mergePath, fileName, ext, request);
+    }
+
+    public static String savaFileNotInBlock( String ext, MultipartFile file, HttpServletRequest request) throws Exception{
+        String destPath = getDestPath(request);
+        String newName = UUID.randomUUID().toString().replaceAll("-", "") + ext;// 文件新名称
+
+        // 上传文件没有分块的话就直接保存目标目录
+        saveFile(destPath, newName, file, request);
+        return destPath + newName;
+    }
+
+    private static String getDestPath(HttpServletRequest request){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
-        String sp = File.separator + "fileDate" + File.separator + fileType + File.separator + year.format(date) + File.separator
-                + m.format(date) + File.separator + d.format(date) + File.separator;
-        String savePath = realPath + sp;
-        File folder = new File(savePath);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        return sp;
+
+        String destPath = getRealPath(request) + File.separator + "fileDate" + File.separator
+                + simpleDateFormat.format(date) + File.separator;// 文件路径
+        return destPath;
     }
-
-
 }
