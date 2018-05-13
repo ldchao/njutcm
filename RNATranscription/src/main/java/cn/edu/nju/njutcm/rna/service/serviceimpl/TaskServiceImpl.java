@@ -1,14 +1,21 @@
 package cn.edu.nju.njutcm.rna.service.serviceimpl;
 
+import cn.edu.nju.njutcm.rna.dao.FileDao;
 import cn.edu.nju.njutcm.rna.dao.TaskDao;
+import cn.edu.nju.njutcm.rna.model.FileEntity;
 import cn.edu.nju.njutcm.rna.model.TaskEntity;
 import cn.edu.nju.njutcm.rna.service.TaskService;
+import cn.edu.nju.njutcm.rna.task.RNATranscriptionTask;
+import cn.edu.nju.njutcm.rna.task.ThreadPoolFactory;
 import cn.edu.nju.njutcm.rna.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by ldchao on 2018/5/12.
@@ -19,11 +26,13 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     TaskDao taskDao;
 
+    @Autowired
+    FileDao fileDao;
+
     @Override
     public String createTask(TaskEntity taskEntity) {
         TaskEntity result=taskDao.saveAndFlush(taskEntity);
-        // TODO: 2018/5/12 启动线程
-        return null;
+        return startTask(result);
     }
 
     @Override
@@ -35,8 +44,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public String reStartTaskById(Integer id) {
         TaskEntity taskEntity=taskDao.findOne(id);
-        // TODO: 2018/5/12 启动线程
-        return null;
+        return startTask(taskEntity);
     }
 
     @Override
@@ -55,5 +63,18 @@ public class TaskServiceImpl implements TaskService {
     public String getResultPathById(Integer id) {
         TaskEntity taskEntity=taskDao.findOne(id);
         return taskEntity.getResultFile();
+    }
+
+    private String startTask(TaskEntity taskEntity){
+        FileEntity fileEntity=fileDao.findOne(taskEntity.getFileId());
+        String inputFilePath=fileEntity.getSavepath();
+        File inputFile=new File(inputFilePath);
+        if(!inputFile.exists()){
+            return "file not exist";
+        }
+        RNATranscriptionTask transcriptionTask=new RNATranscriptionTask(taskEntity.getId(),inputFilePath,taskDao);
+        ExecutorService executorService= ThreadPoolFactory.getExecutorService();
+        executorService.execute(transcriptionTask);
+        return "success";
     }
 }
