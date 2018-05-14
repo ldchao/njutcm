@@ -43,7 +43,7 @@ define([''], function () {
             $scope.download = function (item) {
                 $.ajax({
                     url: '/download',
-                    type: 'POST',
+                    type: 'GET',
                     data: {
                         taskId: item.id
                     },
