@@ -12,6 +12,9 @@ define([''], function () {
                 url: '/getAllUser',
                 type: 'GET',
                 success: function (resp) {
+                    resp.forEach(function (item) {
+                        item.lastLoginTime_f = new Date(item.lastLoginTime).Format("yyyy-MM-dd hh:mm:ss");
+                    });
                     $timeout(function () {
                         $scope.userList = resp;
                     });

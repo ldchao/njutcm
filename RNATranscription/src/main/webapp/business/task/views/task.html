@@ -17,6 +17,7 @@
         <th>任务名称</th>
         <th>任务类型</th>
         <th>执行时间</th>
+        <th>结束时间</th>
         <th>执行结果</th>
         <th>下载文件</th>
         </thead>
@@ -24,7 +25,8 @@
         <tr ng-repeat="item in taskList track by $index">
             <td>{{item.taskName}}</td>
             <td>{{item.type}}</td>
-            <td>{{item.startAt}}</td>
+            <td>{{item.startAt_f}}</td>
+            <td>{{item.endAt_f?item.endAt_f:'-'}}</td>
             <td><i class="fa" ng-class="{'fa-check-circle':item.status=='success',
             'fa-times-circle':item.status=='fail'||item.status=='overtime',
             'fa-play-circle':item.status=='queuing'||item.status=='executing'}"></i>

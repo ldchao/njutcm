@@ -23,8 +23,8 @@
         <tbody>
         <tr ng-repeat="item in fileList track by $index">
             <td>{{item.fileName}}</td>
-            <td>{{item.size}}</td>
-            <td>{{item.uploadAt}}</td>
+            <td>{{item.size}}B</td>
+            <td>{{item.uploadAt_f}}</td>
             <td>
                 <a class="red" ng-click="deleteFile(item, $index)">删除</a>
             </td>

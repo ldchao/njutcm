@@ -15,6 +15,9 @@ define([''], function () {
                 url: '/getFileByUser',
                 type: 'GET',
                 success: function (resp) {
+                    resp.forEach(function (item) {
+                        item.uploadAt_f = new Date(item.uploadAt).Format("yyyy-MM-dd hh:mm:ss");
+                    });
                     FILE_DATA = resp;
                     $timeout(function () {
                         $scope.fileList = resp;

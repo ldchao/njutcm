@@ -15,6 +15,12 @@ define([''], function () {
                 url: '/getAllTaskByUser',
                 type: 'GET',
                 success: function (resp) {
+                    resp.forEach(function (item) {
+                        item.startAt_f = new Date(item.startAt).Format("yyyy-MM-dd hh:mm:ss");
+                        if (item.endAt) {
+                            item.endAt_f = new Date(item.endAt).Format("yyyy-MM-dd hh:mm:ss");
+                        }
+                    });
                     TASK_DATA = resp;
                     $timeout(function () {
                         $scope.taskList = resp;
@@ -28,9 +34,9 @@ define([''], function () {
             $scope.key = '';
             $scope.search = function () {
                 $scope.taskList = TASK_DATA.filter(function (item) {
-                    return (item.id.indexOf($scope.key) > -1
-                    || item.app.indexOf($scope.key) > -1
-                    || item.result.indexOf($scope.key) > -1);
+                    return (item.taskName.indexOf($scope.key) > -1
+                    || item.type.indexOf($scope.key) > -1
+                    || item.status.indexOf($scope.key) > -1);
                 });
             };
 

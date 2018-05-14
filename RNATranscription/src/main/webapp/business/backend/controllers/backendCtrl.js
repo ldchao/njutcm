@@ -32,6 +32,7 @@ define([''], function () {
                     success: function (resp) {
                         if (resp == 'success') {
                             $state.go('admin');
+                            commonService.login($scope.userModel.name);
                         } else {
                             commonService.showMessage($scope, 'error', resp);
                         }
