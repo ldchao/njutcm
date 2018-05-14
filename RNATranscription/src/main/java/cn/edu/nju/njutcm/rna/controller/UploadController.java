@@ -67,8 +67,8 @@ public class UploadController {
             if(destPath!=null){
                 FileEntity fileEntity=new FileEntity();
                 fileEntity.setFileName(name);
-//                UserVO userVO = (UserVO) request.getSession().getAttribute("User");
-//                fileEntity.setUser(userVO.getUsername());
+                UserVO userVO = (UserVO) request.getSession().getAttribute("User");
+                fileEntity.setUser(userVO.getUsername());
                 fileEntity.setUser("test");
                 fileEntity.setSize(Double.valueOf(size));
                 fileEntity.setSavepath(destPath);
