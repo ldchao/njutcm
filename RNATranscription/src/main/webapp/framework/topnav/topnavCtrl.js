@@ -31,9 +31,7 @@ define([], function () {
                             data: data,
                             success: function (resp) {
                                 if (resp == 'success') {
-                                    $timeout(function () {
-                                        commonService.login(data.username);
-                                    });
+                                    location.reload();
                                 } else {
                                     commonService.showMessage($scope, 'error', resp);
                                 }
@@ -64,7 +62,6 @@ define([], function () {
 
             // 是否已登录
             $scope.hasLogin = function () {
-                console.log("hasLogin " + commonService.auth());
                 return commonService.auth();
             };
 
@@ -78,6 +75,10 @@ define([], function () {
                     $("#logout").slideUp(100);
                 }
             };
+            $("#middle").click(function () {
+                $("#logout").hide();
+                toggle = false;
+            });
 
             $scope.logout = function () {
                 $.ajax({
@@ -85,11 +86,8 @@ define([], function () {
                     type: 'GET',
                     success: function (resp) {
                         if (resp == 'logout_success') {
-                            $("#logout").hide();
-                            $timeout(function () {
-                                commonService.logout();
-                            });
-                            commonService.showMessage($scope, 'success', '登出成功');
+                            commonService.logout();
+                            location.reload();
                         }
                     },
                     error: function (err) {
