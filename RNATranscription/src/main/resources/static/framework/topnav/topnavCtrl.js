@@ -33,7 +33,9 @@ define([], function () {
                                 if (resp == 'success') {
                                     location.reload();
                                 } else {
-                                    commonService.showMessage($scope, 'error', resp);
+                                    $timeout(function () {
+                                        commonService.showMessage($scope, 'error', resp);
+                                    });
                                 }
                             },
                             error: function (err) {
@@ -88,6 +90,10 @@ define([], function () {
                         if (resp == 'logout_success') {
                             commonService.logout();
                             location.reload();
+                        } else {
+                            $timeout(function () {
+                                commonService.showMessage($scope, 'error', resp);
+                            });
                         }
                     },
                     error: function (err) {

@@ -19,6 +19,6 @@ require.config({
 /**
  * 主启动类，手动给html element绑定module
  */
-require(['framework/framework'], function (app) {
+require(['./framework/framework'], function (app) {
     angular.bootstrap($('html'), [app.name]);
 });
