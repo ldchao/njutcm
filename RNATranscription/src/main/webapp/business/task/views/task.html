@@ -2,6 +2,8 @@
 <div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
 
 <div class="table_container">
+    <button class="btn btn-primary" ng-click="getTasks()">刷新</button>
+
     <div class="input-group">
         <input type="text" class="form-control" placeholder="请输入关键字（任务编号、应用名、执行结果）搜索..."
                ng-model="key" ng-change="search()">
@@ -60,5 +62,10 @@
     .fa-play-circle,
     .fa-play-circle + span {
         color: #1587e8;
+    }
+
+    .input-group {
+        width: calc(100% - 60px);
+        float: right;
     }
 </style>

@@ -11,22 +11,28 @@ define([''], function () {
             var FILE_DATA = [];
             $scope.fileList = [];
 
-            $.ajax({
-                url: '/getFileByUser',
-                type: 'GET',
-                success: function (resp) {
-                    resp.forEach(function (item) {
-                        item.uploadAt_f = new Date(item.uploadAt).Format("yyyy-MM-dd hh:mm:ss");
-                    });
-                    FILE_DATA = resp;
-                    $timeout(function () {
-                        $scope.fileList = resp;
-                    });
-                },
-                error: function (err) {
-                    console.log(err)
-                }
-            });
+            function getFiles() {
+                $.ajax({
+                    url: '/getFileByUser',
+                    type: 'GET',
+                    success: function (resp) {
+                        resp.forEach(function (item) {
+                            item.uploadAt_f = new Date(item.uploadAt).Format("yyyy-MM-dd hh:mm:ss");
+                        });
+                        FILE_DATA = resp;
+                        $timeout(function () {
+                            $scope.fileList = resp;
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                });
+            }
+
+            if (commonService.auth()) {
+                getFiles();
+            }
 
             $scope.deleteFile = function (item, index) {
                 commonService.confirm('删除文件：' + item.name)
