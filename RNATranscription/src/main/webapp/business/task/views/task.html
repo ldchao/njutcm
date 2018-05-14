@@ -33,11 +33,11 @@
                 <span>{{item.status}}</span>
             </td>
             <td>
-                <a class="blue" ng-click="download(item)" ng-if="item.status=='success'">下载</a>
+                <a class="blue" ng-href='{{"/download/?taskId="+item.id}}' ng-if="item.status=='success'">下载</a>
             </td>
         </tr>
         <tr ng-show="taskList.length==0||!taskList">
-            <td colspan="5" class="no_data">
+            <td colspan="6" class="no_data">
                 <i class="fa fa-info-circle"></i>
                 暂无数据
             </td>
