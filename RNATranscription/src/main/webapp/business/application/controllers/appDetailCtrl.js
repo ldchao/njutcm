@@ -5,8 +5,8 @@
 define([''], function () {
     'use strict';
 
-    var appDetailCtrl = ['$scope', '$uibModal', 'commonService', '$state',
-        function ($scope, $uibModal, commonService, $state) {
+    var appDetailCtrl = ['$scope', '$uibModal', 'commonService', '$state', '$timeout',
+        function ($scope, $uibModal, commonService, $state, $timeout) {
 
             $scope.taskModel = {
                 taskName: '',
@@ -51,7 +51,9 @@ define([''], function () {
                         if (resp == 'success') {
                             $state.go("task");
                         } else {
-                            commonService.showMessage($scope, 'error', resp);
+                            $timeout(function () {
+                                commonService.showMessage($scope, 'error', resp);
+                            });
                         }
                     },
                     error: function (err) {

@@ -5,8 +5,8 @@
 define([''], function () {
     'use strict';
 
-    var addCtrl = ['$scope', '$uibModalInstance',
-        function ($scope, $uibModalInstance) {
+    var addCtrl = ['$scope', '$uibModalInstance', 'commonService',
+        function ($scope, $uibModalInstance, commonService) {
 
             $scope.data = {
                 username: '',

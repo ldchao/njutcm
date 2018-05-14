@@ -5,14 +5,16 @@
 define([''], function () {
     'use strict';
 
-    var adminCtrl = ['$scope', '$uibModal', 'commonService',
-        function ($scope, $uibModal, commonService) {
+    var adminCtrl = ['$scope', '$uibModal', 'commonService', '$timeout',
+        function ($scope, $uibModal, commonService, $timeout) {
 
             $.ajax({
                 url: '/getAllUser',
                 type: 'GET',
                 success: function (resp) {
-                    $scope.userList = resp;
+                    $timeout(function () {
+                        $scope.userList = resp;
+                    });
                 },
                 error: function (err) {
                     console.log(err)

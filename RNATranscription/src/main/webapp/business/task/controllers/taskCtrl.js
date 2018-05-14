@@ -43,7 +43,9 @@ define([''], function () {
                     },
                     success: function (resp) {
                         if (resp != 'success') {
-                            commonService.showMessage($scope, 'error', resp);
+                            $timeout(function () {
+                                commonService.showMessage($scope, 'error', resp);
+                            });
                         }
                     },
                     error: function (err) {
