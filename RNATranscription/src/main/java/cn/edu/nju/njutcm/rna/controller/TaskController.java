@@ -32,7 +32,7 @@ public class TaskController {
         taskEntity.setType(type);
         taskEntity.setStartAt(new Timestamp(System.currentTimeMillis()));
         taskEntity.setFileId(fileId);
-        taskEntity.setStatus("排队中");
+        taskEntity.setStatus("queuing");
         return taskService.createTask(taskEntity);
     }
 
@@ -49,6 +49,7 @@ public class TaskController {
     }
 
     //获取所有任务列表
+    @GetMapping("/getAllTaskByUser")
     public List<TaskVO> getAllTaskByUser(HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return taskService.getAllTaskByUser(userVO.getUsername());

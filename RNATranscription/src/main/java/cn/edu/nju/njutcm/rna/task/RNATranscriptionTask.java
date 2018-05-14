@@ -31,9 +31,9 @@ public class RNATranscriptionTask implements Runnable {
     @Override
     public void run() {
         TaskEntity taskEntity = taskDao.findOne(id);
-        System.out.println("启动线程");
+        System.out.println("线程启动");
         //更新状态
-        taskEntity.setStatus("正在执行");
+        taskEntity.setStatus("executing");
         taskDao.saveAndFlush(taskEntity);
 
         String fileName = inputFile.substring(inputFile.lastIndexOf(File.separator)+1);
@@ -47,11 +47,11 @@ public class RNATranscriptionTask implements Runnable {
             Process ps = Runtime.getRuntime().exec(cmd);
             Boolean result = ps.waitFor(60, TimeUnit.MINUTES);
             if(result){
-                taskEntity.setStatus("执行成功");
+                taskEntity.setStatus("success");
                 taskEntity.setResultFile("/opt/data/result/"+fileName + "_fastqc.html");
                 taskEntity.setEndAt(new Timestamp(System.currentTimeMillis()));
             }else{
-                taskEntity.setStatus("执行超时");
+                taskEntity.setStatus("overtime");
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
             StringBuffer sb = new StringBuffer();
@@ -63,11 +63,12 @@ public class RNATranscriptionTask implements Runnable {
             }
             System.out.println(sb.toString());
         } catch (IOException e) {
-            taskEntity.setStatus("执行失败");
+            taskEntity.setStatus("fail");
         } catch (InterruptedException e) {
-            taskEntity.setStatus("执行失败");
+            taskEntity.setStatus("fail");
         }
         taskDao.saveAndFlush(taskEntity);
+        System.out.println("线程结束");
     }
 
 }
