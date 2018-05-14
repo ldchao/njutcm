@@ -6,8 +6,8 @@ define([], function () {
 
     'use strict';
 
-    var topnavCtrl = ['$scope', '$state', '$uibModal', 'commonService',
-        function ($scope, $state, $uibModal, commonService) {
+    var topnavCtrl = ['$scope', '$state', '$uibModal', 'commonService', '$timeout',
+        function ($scope, $state, $uibModal, commonService, $timeout) {
 
             $scope.loginModal = function (type) {
 
@@ -31,7 +31,9 @@ define([], function () {
                             data: data,
                             success: function (resp) {
                                 if (resp == 'success') {
-                                    commonService.login(data.username);
+                                    $timeout(function () {
+                                        commonService.login(data.username);
+                                    });
                                 } else {
                                     commonService.showMessage($scope, 'error', resp);
                                 }
@@ -62,9 +64,39 @@ define([], function () {
 
             // 是否已登录
             $scope.hasLogin = function () {
+                console.log("hasLogin " + commonService.auth());
                 return commonService.auth();
-            }
+            };
 
+            // 登出
+            var toggle = false;
+            $scope.logoutToggle = function () {
+                toggle = !toggle;
+                if (toggle) {
+                    $("#logout").slideDown(300);
+                } else {
+                    $("#logout").slideUp(100);
+                }
+            };
+
+            $scope.logout = function () {
+                $.ajax({
+                    url: '/logout',
+                    type: 'GET',
+                    success: function (resp) {
+                        if (resp == 'logout_success') {
+                            $("#logout").hide();
+                            $timeout(function () {
+                                commonService.logout();
+                            });
+                            commonService.showMessage($scope, 'success', '登出成功');
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            };
         }];
 
     return topnavCtrl;
