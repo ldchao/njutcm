@@ -5,15 +5,23 @@
 define([''], function () {
     'use strict';
 
-    var taskCtrl = ['$scope',
-        function ($scope) {
+    var taskCtrl = ['$scope', 'commonService',
+        function ($scope, commonService) {
 
-            var TASK_DATA = [
-                {id: 'task-1', app: 'app-1', time: '2018-05-10 19:53', result: 'success'},
-                {id: 'task-2', app: 'app-2', time: '2018-05-10 20:53', result: 'fail'},
-                {id: 'task-3', app: 'app-3', time: '2018-05-10 21:53', result: 'process'}
-            ];
-            $scope.taskList = angular.copy(TASK_DATA);
+            var TASK_DATA = [];
+            // $scope.taskList = angular.copy(TASK_DATA);
+
+            $.ajax({
+                url: '/getAllTaskByUser',
+                type: 'GET',
+                success: function (resp) {
+                    TASK_DATA = resp;
+                    $scope.taskList = angular.copy(TASK_DATA);
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
 
             $scope.key = '';
             $scope.search = function () {
@@ -24,8 +32,22 @@ define([''], function () {
                 });
             };
 
-            $scope.download = function () {
-
+            $scope.download = function (item) {
+                $.ajax({
+                    url: '/download',
+                    type: 'POST',
+                    data: {
+                        taskId: item.id
+                    },
+                    success: function (resp) {
+                        if (resp != 'success') {
+                            commonService.showMessage($scope, 'error', resp);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
             };
 
         }

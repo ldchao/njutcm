@@ -12,7 +12,7 @@ define([''], function () {
 
         $scope.data = {
             username: '',
-            pwd: ''
+            password: ''
         };
 
         $scope.cancel = function () {
@@ -26,12 +26,12 @@ define([''], function () {
                 return;
             }
 
-            if (!$scope.data.pwd) {
+            if (!$scope.data.password) {
                 commonService.showMessage($scope, 'error', '请输入密码');
                 return;
             }
 
-            if (type=='注册' && $scope.data.pwd!==$scope.data.pwd2) {
+            if (type=='注册' && $scope.data.password!==$scope.data.password2) {
                 commonService.showMessage($scope, 'error', '两次密码不一致');
                 return;
             }

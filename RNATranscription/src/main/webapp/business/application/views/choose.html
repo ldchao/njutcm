@@ -1,0 +1,35 @@
+<!-- Created by L.H.S on 2018/5/7. -->
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">选择文件</h3>
+    <div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
+</div>
+
+<div class="modal-body" id="modal-body">
+
+    <div class="choose_each_file" ng-repeat="item in fileList track by $index">
+        <input name="chooseFile" id="{{$index}}" type="radio" ng-value="$index" ng-model="$parent.chosen">
+        <label for="{{$index}}">{{item.fileName}}</label>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">选择</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+</div>
+
+<style>
+    .choose_each_file {
+        margin-left: 15px;
+    }
+
+    .choose_each_file label {
+        font-weight: 400;
+        margin-left: 5px;
+    }
+
+    .modal-body {
+        max-height: 500px;
+        overflow: auto;
+    }
+</style>

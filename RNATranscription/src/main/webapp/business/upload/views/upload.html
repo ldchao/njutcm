@@ -1,7 +1,7 @@
 <!-- Created by L.H.S on 2017/8/14. -->
 
 <div class="table_container">
-    <button class="btn btn-primary"><a href="/uploader" target="_black">上传文件</a></button>
+    <button class="btn btn-primary upload_btn"><a href="/uploader" target="_black">上传文件</a></button>
 
     <div class="input-group">
         <input type="text" class="form-control" placeholder="请输入关键字（文件名、类型）搜索..."
@@ -16,23 +16,21 @@
     <table class="table table-striped table-hover">
         <thead>
         <th>文件名</th>
-        <th>文件类型</th>
         <th>文件大小</th>
         <th>上传日期</th>
         <th>操作</th>
         </thead>
         <tbody>
         <tr ng-repeat="item in fileList track by $index">
-            <td>{{item.name}}</td>
-            <td>{{item.type}}</td>
+            <td>{{item.fileName}}</td>
             <td>{{item.size}}</td>
-            <td>{{item.date}}</td>
+            <td>{{item.uploadAt}}</td>
             <td>
                 <a class="red" ng-click="deleteFile(item, $index)">删除</a>
             </td>
         </tr>
         <tr ng-show="fileList.length==0||!fileList">
-            <td colspan="5" class="no_data">
+            <td colspan="4" class="no_data">
                 <i class="fa fa-info-circle"></i>
                 暂无数据
             </td>

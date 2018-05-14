@@ -1,6 +1,85 @@
 <!-- Created by L.H.S on 2018/5/10. -->
+<div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
 
 <ol class="breadcrumb">
     <li><a ui-sref="application">我的应用</a></li>
     <li class="active">应用详情</li>
 </ol>
+
+<div class="row ">
+    <div class="col-md-6">
+        <div class="app_detail_config">
+            <div class="task_config_container">
+                <div class="form_line">
+                    <label>任务编号</label>
+                    <input class="form-control" type="text" ng-model="taskModel.taskName">
+                </div>
+
+                <div class="form_line">
+                    <label>选择文件</label>
+                    <input class="form-control" type="text" ng-model="fileName"
+                           ng-click="chooseFile()" readonly placeholder="选择已有文件">
+
+                    <button class="btn btn-info upload_btn"><a href="/uploader" target="_black">上传新文件</a></button>
+                </div>
+
+                <button class="btn btn-primary submit" ng-click="run()">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="app_detail_config">
+            <uib-tabset active="active" type="tabs">
+                <!-- 说明 -->
+                <uib-tab index="0" heading="说明">
+                    此处为说明
+                </uib-tab>
+
+                <!-- 例子 -->
+                <uib-tab index="1" heading="例子">
+                    此处为例子
+                </uib-tab>
+            </uib-tabset>
+        </div>
+    </div>
+</div>
+
+<style>
+    #content {
+        background-color: #e0e0e0;
+    }
+
+    .row {
+        margin: 0 15px;
+    }
+
+    .app_detail_config {
+        width: 100%;
+        min-height: 500px;
+        background-color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .task_config_container {
+        padding: 15px 15px;
+    }
+
+    .task_config_container .form_line {
+        width: 340px;
+        margin-left: 0;
+    }
+
+    .task_config_container .form_line input {
+        width: 180px;
+    }
+
+    .task_config_container button.submit {
+        width: 245px;
+        margin-top: 15px;
+    }
+
+    .upload_btn {
+        float: right;
+    }
+</style>

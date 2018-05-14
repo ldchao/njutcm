@@ -21,7 +21,10 @@ define(['lazy-load/lazyLoad'],
             templateUrl: 'business/application/views/appDetail.html',
             controller: 'appDetailCtrl',
             scripts: {
-                controllers: ['business/application/controllers/appDetailCtrl']
+                controllers: [
+                    'business/application/controllers/appDetailCtrl',
+                    'business/application/controllers/chooseCtrl'
+                ]
             }
         }];
 

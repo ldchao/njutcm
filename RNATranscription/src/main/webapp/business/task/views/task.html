@@ -21,12 +21,12 @@
         </thead>
         <tbody>
         <tr ng-repeat="item in taskList track by $index">
-            <td>{{item.id}}</td>
-            <td>{{item.app}}</td>
-            <td>{{item.time}}</td>
-            <td><i class="fa" ng-class="{'fa-check-circle':item.result=='success',
-            'fa-times-circle':item.result=='fail', 'fa-play-circle':item.result=='process'}"></i>
-                <span>{{item.result}}</span>
+            <td>{{item.taskName}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.startAt}}</td>
+            <td><i class="fa" ng-class="{'fa-check-circle':item.status=='success',
+            'fa-times-circle':item.status=='fail'||item.status=='overtime', 'fa-play-circle':item.status=='queuing'}"></i>
+                <span>{{item.status}}</span>
             </td>
             <td>
                 <a class="blue" ng-click="download(item)">下载</a>

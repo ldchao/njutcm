@@ -3,38 +3,38 @@ $(function () {
     var flie_count = 0;
 
     WebUploader.Uploader.register({
-            "before-send":"beforeSend"  //每个分片上传前
+            "before-send": "beforeSend"  //每个分片上传前
         },
         {
             //时间点2：如果有分块上传，则每个分块上传之前调用此函数
-            beforeSend:function(block){
+            beforeSend: function (block) {
                 var file = block.file;
                 var fileMd5 = file.wholeMd5;
                 var deferred = WebUploader.Deferred();
                 $.ajax({
-                    type:"POST",
-                    url:"/blockIsExist",  //ajax验证每一个分片
-                    data:{
-                        md5value:fileMd5,  //文件唯一标记
-                        chunk:block.chunk  //当前分块下标
+                    type: "POST",
+                    url: "/blockIsExist",  //ajax验证每一个分片
+                    data: {
+                        md5value: fileMd5,  //文件唯一标记
+                        chunk: block.chunk  //当前分块下标
                     },
                     cache: false,
                     async: false,  // 与js同步
                     timeout: 1000, //todo 超时的话，只能认为该分片未上传过
-                    dataType:"json",
-                    success:function(response){
-                        console.info("["+response+"]");
-                        if(response== true){
+                    dataType: "json",
+                    success: function (response) {
+                        console.info("[" + response + "]");
+                        if (response == true) {
                             //分块存在，跳过
                             console.info("block exist");
                             deferred.reject();
-                        }else{
+                        } else {
                             //分块不存在或不完整，重新发送该分块内容
                             console.info("block not exist");
                             deferred.resolve();
                         }
                     },
-                    error:function () {
+                    error: function () {
                         deferred.resolve();
                     }
                 });
@@ -63,7 +63,7 @@ $(function () {
         threads: 1, //上传并发数
         //fileNumLimit :1,
         fileSizeLimit: 3 * 1024 * 1024 * 1024,//最大2GB
-        fileSingleSizeLimit: 3 * 1024  * 1024 * 1024,
+        fileSingleSizeLimit: 3 * 1024 * 1024 * 1024,
         resize: false//不压缩
         //选择文件类型
         //accept: {
@@ -78,7 +78,8 @@ $(function () {
     uploader.on('fileQueued', function (file) {
         $list.append('<div id="' + file.id + '" class="item">' +
             '<h4 class="info">' + file.name + '<button type="button" fileId="' + file.id + '" class="btn btn-danger btn-delete"><span class="glyphicon glyphicon-trash"></span></button></h4>' +
-            '<p class="state">正在计算文件MD5...请等待计算完毕后再点击上传！</p><input type="text" id="s_WU_FILE_'+flie_count+'" />' +
+            '<p class="state">正在计算文件MD5...请等待计算完毕后再点击上传！</p>' +
+            // '<input type="text" id="rename_' + file.id + '" />' +   // 重命名
             '</div>');
         // console.info("id=file_"+flie_count);
         flie_count++;
@@ -96,23 +97,25 @@ $(function () {
         //console.info("guid= "+WebUploader.guid());
 
         //md5计算
-        uploader.md5File(file,0,10*1024*1024)
-            .progress(function(percentage) {
+        uploader.md5File(file, 0, 10 * 1024 * 1024)
+            .progress(function (percentage) {
                 console.log('Percentage:', percentage);
             })
             // 完成
             .then(function (fileMd5) { // 完成
                 var end = +new Date();
-                console.log("before-send-file  preupload: file.size="+file.size+" file.md5="+fileMd5);
+                // console.log("before-send-file  preupload: file.size="+file.size+" file.md5="+fileMd5);
                 file.wholeMd5 = fileMd5;//获取到了md5
                 //uploader.options.formData.md5value = file.wholeMd5;//每个文件都附带一个md5，便于实现秒传
 
                 $('#' + file.id).find('p.state').text('MD5计算完毕，可以点击上传了');
-                console.info("MD5="+fileMd5);
+                // console.info("MD5="+fileMd5);
             });
 
-
+        /** 添加文件后重新显示暂停按钮 */
+        $('#StopBtn').fadeIn('slow');
     });
+
     // 文件上传过程中创建进度条实时显示。
     uploader.on('uploadProgress', function (file, percentage) {
         var $li = $('#' + file.id),
@@ -129,7 +132,7 @@ $(function () {
     });
 
     //发送前填充数据
-    uploader.on( 'uploadBeforeSend', function( block, data ) {
+    uploader.on('uploadBeforeSend', function (block, data) {
         // block为分块数据。
 
         // file为分块对应的file对象。
@@ -137,17 +140,18 @@ $(function () {
         var fileMd5 = file.wholeMd5;
         // 修改data可以控制发送哪些携带数据。
 
-        console.info("fileName= "+file.name+" fileMd5= "+fileMd5+" fileId= "+file.id+" chunk="+block.chunk);
-        console.info("input file= "+ flie_count);
+        // console.info("fileName= "+file.name+" fileMd5= "+fileMd5+" fileId= "+file.id+" chunk="+block.chunk);
+        console.info("input file= " + flie_count);
         // 将存在file对象中的md5数据携带发送过去。
         data.md5value = fileMd5;//md5
-        data.fileName_ = $("#s_"+file.id).val();
-        console.log("fileName_: "+data.fileName_);
+        /** 重命名 */
+        // data.fileName_ = $("#rename_" + file.id).val();
+        // console.log("fileName_: " + data.fileName_);
         // 删除其他数据
         // delete data.key;
-        if(block.chunks>1){ //文件大于chunksize 分片上传
+        if (block.chunks > 1) { //文件大于chunksize 分片上传
             data.isChunked = true;
-            console.info("data.isChunked= "+data.isChunked);
+            console.info("data.isChunked= " + data.isChunked);
 
             //##########################断点续传######################
             // var deferred = WebUploader.Deferred();
@@ -177,9 +181,9 @@ $(function () {
             // });
             //##########################断点续传######################
 
-        }else{
+        } else {
             data.isChunked = false;
-            console.info("data.isChunked="+data.isChunked);
+            console.info("data.isChunked=" + data.isChunked);
         }
 
     });
@@ -227,7 +231,7 @@ $(function () {
             console.log("当前按钮是暂停，即将变为继续");
             $("#StopBtn").html("继续上传");
             $("#StopBtn").attr("status", "continuous");
-            console.log("当前所有文件==="+uploader.getFiles());
+            console.log("当前所有文件===" + uploader.getFiles());
             console.log("=============暂停上传==============");
             uploader.stop(true);
             console.log("=============所有当前暂停的文件=============");

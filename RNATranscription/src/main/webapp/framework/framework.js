@@ -15,10 +15,11 @@ define(['ui-router/angular-ui-router',
         'framework/confirm/confirmCtrl',
         'business/application/configures/appRouterConfig',
         'business/upload/configures/uploadRouterConfig',
-        'business/task/configures/taskRouterConfig'
+        'business/task/configures/taskRouterConfig',
+        'business/backend/configures/backendRouterConfig'
     ],
     function (router, commonService, topnavCtrl, leftnavCtrl, loginCtrl, confirmCtrl,
-              appRouterConfig, uploadRouterConfig, taskRouterConfig) {
+              appRouterConfig, uploadRouterConfig, taskRouterConfig, backendRouterConfig) {
         'use strict';
 
         // 注入框架的配置文件（新增业务模块在此处添加注册）
@@ -29,17 +30,21 @@ define(['ui-router/angular-ui-router',
             'ui.router',
             appRouterConfig.name,
             uploadRouterConfig.name,
-            taskRouterConfig.name
+            taskRouterConfig.name,
+            backendRouterConfig.name
         ];
 
         var framework = angular.module('framework', dependency);
 
+        // 公共服务
         framework.service('commonService', commonService);
 
+        // 导航栏
         framework.controller('topnavCtrl', topnavCtrl);
         framework.controller('leftnavCtrl', leftnavCtrl);
         framework.controller('loginCtrl', loginCtrl);
 
+        // 确认框
         framework.controller('confirmCtrl', confirmCtrl);
 
         // 初始跳转至首页模块

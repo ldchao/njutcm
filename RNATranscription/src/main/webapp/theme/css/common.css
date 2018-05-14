@@ -136,3 +136,16 @@ button a:focus {
 .table_container {
     margin: 15px 15px;
 }
+
+button.upload_btn {
+    width: 82px;
+    height: 35px;
+    line-height: 35px;
+    padding: 0 0;
+}
+
+button.upload_btn a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}

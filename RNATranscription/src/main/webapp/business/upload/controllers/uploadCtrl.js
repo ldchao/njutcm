@@ -8,14 +8,20 @@ define([''], function () {
     var uploadCtrl = ['$scope', 'commonService',
         function ($scope, commonService) {
 
-            var FILE_DATA = [
-                {name: 'test-1', type: 'java', size: '500KB', date: '2018-05-10'},
-                {name: 'test-2', type: 'txt', size: '600KB', date: '2018-05-11'},
-                {name: 'test-3', type: 'py', size: '520KB', date: '2018-05-12'},
-                {name: 'test-4', type: 'js', size: '700KB', date: '2018-05-13'},
-                {name: 'test-5', type: 'php', size: '1500KB', date: '2018-05-14'}
-            ];
-            $scope.fileList = angular.copy(FILE_DATA);
+            var FILE_DATA = [];
+            // $scope.fileList = angular.copy(FILE_DATA);
+
+            $.ajax({
+                url: '/getFileByUser',
+                type: 'GET',
+                success: function (resp) {
+                    FILE_DATA = resp;
+                    $scope.fileList = angular.copy(FILE_DATA);
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
 
             $scope.deleteFile = function (item, index) {
                 commonService.confirm('删除文件：' + item.name)

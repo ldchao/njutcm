@@ -1,6 +1,6 @@
 <!-- Created by L.H.S on 2018/5/7. -->
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">{{modalType}}</h3>
+    <h3 class="modal-title" id="modal-title">添加用户</h3>
     <div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
 </div>
 
@@ -16,7 +16,7 @@
         <input type="password" class="form-control" ng-model="data.password">
     </div>
 
-    <div class="form_line" ng-if="modalType=='注册'">
+    <div class="form_line">
         <label>确认密码</label>
         <input type="password" class="form-control" ng-model="data.password2">
     </div>
@@ -24,6 +24,6 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="ok()">{{modalType}}</button>
+    <button class="btn btn-primary" type="button" ng-click="ok()">添加</button>
     <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
 </div>
