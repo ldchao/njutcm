@@ -52,5 +52,39 @@ define(['ui-router/angular-ui-router',
             $urlRouterProvider.otherwise('/application');
         }]);
 
+        // 判断登录状态
+        framework.run(function ($rootScope, $state) {
+            $rootScope.$on('$stateChangeStart', function (event, toState) {
+
+                // 判断是否登录——保持登录状态
+                $.ajax({
+                    url: '/validate',
+                    type: 'GET',
+                    success: function (resp) {
+                        if (resp == 'true' || resp == true) {
+                            // 已登录
+                            if (!sessionStorage.getItem('username')) {
+                                $.ajax({
+                                    url: '/getUserMessage',
+                                    type: 'GET',
+                                    success: function (resp) {
+                                        sessionStorage.setItem('username', resp.username);
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                    }
+                                });
+                            }
+                        } else {
+                            sessionStorage.removeItem('username');
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
+
         return framework;
     });

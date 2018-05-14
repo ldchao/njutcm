@@ -5,18 +5,20 @@
 define([''], function () {
     'use strict';
 
-    var uploadCtrl = ['$scope', 'commonService',
-        function ($scope, commonService) {
+    var uploadCtrl = ['$scope', 'commonService', '$timeout',
+        function ($scope, commonService, $timeout) {
 
             var FILE_DATA = [];
-            // $scope.fileList = angular.copy(FILE_DATA);
+            $scope.fileList = [];
 
             $.ajax({
                 url: '/getFileByUser',
                 type: 'GET',
                 success: function (resp) {
                     FILE_DATA = resp;
-                    $scope.fileList = angular.copy(FILE_DATA);
+                    $timeout(function () {
+                        $scope.fileList = resp;
+                    });
                 },
                 error: function (err) {
                     console.log(err)

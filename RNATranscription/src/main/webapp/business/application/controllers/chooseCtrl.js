@@ -5,21 +5,24 @@
 define([''], function () {
     'use strict';
 
-    var chooseCtrl = ['$scope', '$uibModalInstance',
-        function ($scope, $uibModalInstance) {
+    var chooseCtrl = ['$scope', '$uibModalInstance', '$timeout', 'commonService',
+        function ($scope, $uibModalInstance, $timeout, commonService) {
+
 
             $.ajax({
                 url: '/getFileByUser',
                 type: 'GET',
                 success: function (resp) {
-                    $scope.fileList = resp;
+                    $timeout(function () {
+                        $scope.fileList = resp;
+                    });
                 },
                 error: function (err) {
                     console.log(err);
                 }
             });
 
-            $scope.chosen = '';
+            $scope.chosen;
 
             $scope.cancel = function () {
                 $uibModalInstance.dismiss(false);
@@ -27,7 +30,7 @@ define([''], function () {
 
             $scope.ok = function () {
 
-                if (!$scope.chosen) {
+                if (!$scope.chosen && $scope.chosen !== 0) {
                     commonService.showMessage($scope, 'error', '请选择文件');
                     return;
                 }

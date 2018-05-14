@@ -5,18 +5,20 @@
 define([''], function () {
     'use strict';
 
-    var taskCtrl = ['$scope', 'commonService',
-        function ($scope, commonService) {
+    var taskCtrl = ['$scope', 'commonService', '$timeout',
+        function ($scope, commonService, $timeout) {
 
             var TASK_DATA = [];
-            // $scope.taskList = angular.copy(TASK_DATA);
+            $scope.taskList = [];
 
             $.ajax({
                 url: '/getAllTaskByUser',
                 type: 'GET',
                 success: function (resp) {
                     TASK_DATA = resp;
-                    $scope.taskList = angular.copy(TASK_DATA);
+                    $timeout(function () {
+                        $scope.taskList = resp;
+                    });
                 },
                 error: function (err) {
                     console.log(err)

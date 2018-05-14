@@ -10,14 +10,18 @@ define([''], function () {
         /**
          * 保存登录的用户名
          * */
-        var username;
 
         this.login = function (name) {
-            username = name;
+            sessionStorage.setItem('username', name);
         };
 
         this.auth = function () {
-            return username;
+            return sessionStorage.getItem('username');
+        };
+
+        this.logout = function () {
+            this.username = '';
+            sessionStorage.removeItem('username');
         };
 
         /**
