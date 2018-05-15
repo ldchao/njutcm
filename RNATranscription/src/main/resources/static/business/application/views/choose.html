@@ -8,7 +8,7 @@
 
     <div class="choose_each_file" ng-repeat="item in fileList track by $index">
         <input name="chooseFile" id="{{$index}}" type="radio" ng-value="$index" ng-model="$parent.chosen">
-        <label for="{{$index}}">{{item.fileName}}</label>
+        <label for="{{$index}}">{{item.fileName}} <i>@{{item.uploadAt_f}}</i></label>
     </div>
 
 </div>
@@ -26,6 +26,12 @@
     .choose_each_file label {
         font-weight: 400;
         margin-left: 5px;
+    }
+
+    .choose_each_file label i {
+        margin-left: 10px;
+        font-size: 12px;
+        color: #999;
     }
 
     .modal-body {

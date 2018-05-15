@@ -35,13 +35,26 @@ define([''], function () {
             }
 
             $scope.deleteFile = function (item, index) {
-                commonService.confirm('删除文件：' + item.name)
+                commonService.confirm('删除文件：' + item.fileName)
                     .result.then(function (resp) {
-
                     if (resp) {
-
-                    } else {
-
+                        $.ajax({
+                            url: '/deleteFileById?fileId=' + item.id,
+                            type: 'DELETE',
+                            success: function (resp) {
+                                if (resp == 'success') {
+                                    $timeout(function () {
+                                        $scope.fileList.splice(index, 1);
+                                        // FILE_DATA.splice(index, 1);  // 此处会自动删除，大概是因为都指向resp，没有copy
+                                    });
+                                } else {
+                                    commonService.showMessage($scope, 'error', resp);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
                     }
                 });
             };

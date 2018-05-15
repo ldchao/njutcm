@@ -58,7 +58,10 @@ define([''], function () {
             return confirmModal;
         };
 
-        /** 格式化时间 */
+        /**
+         * 格式化时间
+         * new Date(timestamp).Format('yyyy-MM-dd hh:mm:ss')
+         * */
         Date.prototype.Format = function (fmt) {
             var o = {
                 "M+": this.getMonth() + 1, //Month
