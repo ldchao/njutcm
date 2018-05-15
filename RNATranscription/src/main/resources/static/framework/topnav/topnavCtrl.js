@@ -42,11 +42,9 @@ define([], function () {
                                 console.log(err);
                             },
                             beforeSend: function () {
-                                console.log("before")
                                 commonService.showLoading();
                             },
                             complete: function () {
-                                console.log("complete")
                                 commonService.hideLoading();
                             }
                         });
