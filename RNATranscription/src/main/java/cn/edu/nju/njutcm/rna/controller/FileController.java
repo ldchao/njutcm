@@ -4,6 +4,7 @@ import cn.edu.nju.njutcm.rna.model.FileEntity;
 import cn.edu.nju.njutcm.rna.service.FileService;
 import cn.edu.nju.njutcm.rna.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +26,12 @@ public class FileController {
     public List<FileEntity> getFileListByUser(HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.getByUser(userVO.getUsername());
+    }
+
+    //删除文件
+    @DeleteMapping(value = "/deleteFileById")
+    public String deleteFile(Integer fileId){
+        return fileService.deleteFileById(fileId);
     }
 
 

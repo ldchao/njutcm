@@ -76,7 +76,7 @@ public class FileUtil {
     private final static List<UploadInfo> uploadInfoList = new ArrayList<>();
 
     private static String Uploaded(String md5, String guid, String chunk, String chunks, String uploadFolderPath,
-                                String fileName, String ext, HttpServletRequest request) throws Exception {
+                                   String fileName, String ext, HttpServletRequest request) throws Exception {
         synchronized (uploadInfoList) {
             if ((md5 != null && !md5.equals("")) && (chunks != null && !chunks.equals("")) && !isExist(md5, chunk)) {
                 uploadInfoList.add(new UploadInfo(md5, chunks, chunk, uploadFolderPath, fileName, ext));
@@ -102,7 +102,7 @@ public class FileUtil {
         }
         return flag;
     }
- 
+
     private static boolean isAllUploaded(final String md5, String chunks) {
         int size = uploadInfoList.stream().filter(new Predicate<UploadInfo>() {
             @Override
@@ -126,7 +126,7 @@ public class FileUtil {
 
     @SuppressWarnings("resource")
     private static String mergeFile(int chunksNumber, String ext, String guid, String uploadFolderPath,
-                                  HttpServletRequest request) {
+                                    HttpServletRequest request) {
         /* 合并输入流 */
         String mergePath = uploadFolderPath;
 
@@ -196,7 +196,7 @@ public class FileUtil {
         }
     }
 
-    private static void createDir(String savePath) throws Exception{
+    private static void createDir(String savePath) throws Exception {
         File fileDirectory = new File(savePath);
         synchronized (fileDirectory) {
             if (!fileDirectory.exists()) {
@@ -213,7 +213,7 @@ public class FileUtil {
     }
 
     public static String savaFileInBlock(String guid, String md5value, String chunks, String chunk, String ext, MultipartFile file, String id,
-                                         HttpServletRequest request) throws Exception{
+                                         HttpServletRequest request) throws Exception {
 
         String mergePath = getRealPath(request) + "\\fileDate\\" + id + "\\";
         // 将文件分块保存到临时文件夹里，便于之后的合并文件
@@ -223,7 +223,7 @@ public class FileUtil {
         return Uploaded(md5value, guid, chunk, chunks, mergePath, fileName, ext, request);
     }
 
-    public static String savaFileNotInBlock( String ext, MultipartFile file, HttpServletRequest request) throws Exception{
+    public static String savaFileNotInBlock(String ext, MultipartFile file, HttpServletRequest request) throws Exception {
         String destPath = getDestPath(request);
         String newName = UUID.randomUUID().toString().replaceAll("-", "") + ext;// 文件新名称
 
@@ -232,7 +232,7 @@ public class FileUtil {
         return destPath + newName;
     }
 
-    private static String getDestPath(HttpServletRequest request){
+    private static String getDestPath(HttpServletRequest request) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
 
@@ -240,4 +240,35 @@ public class FileUtil {
                 + simpleDateFormat.format(date) + File.separator;// 文件路径
         return destPath;
     }
+
+    public static boolean deleteUploadFile(String filePath) {
+        String dirPath=filePath.substring(0,filePath.lastIndexOf(File.separator)+1);
+        return deleteFile(filePath)&&deleteDir(dirPath);
+    }
+
+    private static boolean deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+
+            if (!file.delete()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean deleteDir(String dirPath) {
+        File file = new File(dirPath);
+
+        if (file.exists()) {
+            if (file.listFiles().length == 0) {
+                if (!file.delete()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 }

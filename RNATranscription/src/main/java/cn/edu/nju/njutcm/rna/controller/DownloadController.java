@@ -33,16 +33,16 @@ public class DownloadController {
         try {
             String path = taskService.getResultPathById(taskId);
             File file = new File(path);
-//            System.out.println(file.length());
             if (file.exists()) {
                 String filename = file.getName();
                 fis = new BufferedInputStream(new FileInputStream(file));
                 response.reset();
-                response.setContentType("application/x-download");
+//                response.setContentType("application/x-download");
+                response.setContentType("application/x-msdownload");
                 response.addHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes(), "UTF-8"));
                 response.addHeader("Content-Length", "" + file.length());
                 out = new BufferedOutputStream(response.getOutputStream());
-                response.setContentType("application/octet-stream");
+//                response.setContentType("application/octet-stream");
                 byte[] buffer = new byte[1024 * 1024];
                 int i = -1;
                 while ((i = fis.read(buffer)) != -1) {

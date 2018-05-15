@@ -12,4 +12,6 @@ public interface FileService {
     public Integer addFile(FileEntity fileEntity);
 
     public List<FileEntity> getByUser(String username);
+
+    public String deleteFileById(Integer id);
 }

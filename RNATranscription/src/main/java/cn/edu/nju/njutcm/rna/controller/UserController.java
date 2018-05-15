@@ -54,6 +54,17 @@ public class UserController {
         return user.getLoginMessage();
     }
 
+    //登录
+    @PostMapping(value = "/loginBackend")
+    public String loginBackend(String username, String password, HttpServletRequest request) {
+
+        if(!username.equals("admin")){
+            return "no_permission";
+        }
+        return login(username,password,request);
+    }
+
+
     //注销
     @GetMapping(value = "/logout")
     public String logout(HttpServletRequest request) {
