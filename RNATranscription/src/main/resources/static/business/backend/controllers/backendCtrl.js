@@ -26,7 +26,7 @@ define([''], function () {
                 }
 
                 $.ajax({
-                    url: '/login',
+                    url: '/loginBackend',
                     type: 'POST',
                     data: $scope.userModel,
                     success: function (resp) {

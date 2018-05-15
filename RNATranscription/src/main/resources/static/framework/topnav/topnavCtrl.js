@@ -95,7 +95,7 @@ define([], function () {
                     success: function (resp) {
                         if (resp == 'logout_success') {
                             commonService.logout();
-                            location.reload();
+                            $state.go("application");
                         } else {
                             $timeout(function () {
                                 commonService.showMessage($scope, 'error', resp);
