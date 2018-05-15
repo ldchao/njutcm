@@ -75,6 +75,22 @@ define([''], function () {
                     fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
         };
+
+        /** 加载条 */
+        var loadInstance;
+        this.showLoading = function () {
+            loadInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                keyboard: false,
+                templateUrl: 'framework/loading.html'
+            });
+        };
+
+        this.hideLoading = function () {
+            if (loadInstance)
+                loadInstance.close();
+        }
     };
 
     return commonService;
