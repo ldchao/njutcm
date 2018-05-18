@@ -1,6 +1,7 @@
 package cn.edu.nju.njutcm.rna.util;
 
 import cn.edu.nju.njutcm.rna.entity.UploadInfo;
+import cn.edu.nju.njutcm.rna.vo.UserVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,19 +22,6 @@ import java.util.stream.Collectors;
  */
 public class FileUtil {
 
-    /**
-     * @param request
-     * @return
-     * @Description: 取得tomcat中的webapps目录 如： /home/gzxiaoi/apache-tomcat-8.0.45/webapps
-     */
-    public static String getRealPath(HttpServletRequest request) {
-        return "D:" + File.separator + "upload";
-//            String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-//            realPath = realPath.substring(0, realPath.length() - 1);
-//            int aString = realPath.lastIndexOf(File.separator);
-//            realPath = realPath.substring(0, aString);
-//            return realPath;
-    }
 
     private static boolean saveFile(String savePath, String fileFullName, MultipartFile file, HttpServletRequest request)
             throws Exception {
@@ -215,7 +203,8 @@ public class FileUtil {
     public static String savaFileInBlock(String guid, String md5value, String chunks, String chunk, String ext, MultipartFile file, String id,
                                          HttpServletRequest request) throws Exception {
 
-        String mergePath = getRealPath(request) + "\\fileDate\\" + id + "\\";
+        String mergePath = ApplicationUtil.getInstance().getRootPath() + File.separator + "fileData"
+                + File.separator + getUsername(request) + File.separator + id + File.separator;
         // 将文件分块保存到临时文件夹里，便于之后的合并文件
         String fileName = chunk + ext;
         saveFile(mergePath, fileName, file, request);
@@ -236,14 +225,15 @@ public class FileUtil {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
 
-        String destPath = getRealPath(request) + File.separator + "fileDate" + File.separator
+        String destPath = ApplicationUtil.getInstance().getRootPath() + File.separator
+                + "fileData" + File.separator+ getUsername(request) + File.separator
                 + simpleDateFormat.format(date) + File.separator;// 文件路径
         return destPath;
     }
 
     public static boolean deleteUploadFile(String filePath) {
-        String dirPath=filePath.substring(0,filePath.lastIndexOf(File.separator)+1);
-        return deleteFile(filePath)&&deleteDir(dirPath);
+        String dirPath = filePath.substring(0, filePath.lastIndexOf(File.separator) + 1);
+        return deleteFile(filePath) && deleteDir(dirPath);
     }
 
     private static boolean deleteFile(String filePath) {
@@ -270,5 +260,16 @@ public class FileUtil {
         return true;
     }
 
+    public static void makeSureDirExist(String dirPath) {
+        File file = new File(dirPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+    }
+
+    private static String getUsername(HttpServletRequest request) {
+        UserVO userVO = (UserVO) request.getSession().getAttribute("User");
+        return userVO == null ? "illegal" : userVO.getUsername();
+    }
 
 }

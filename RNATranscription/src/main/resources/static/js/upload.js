@@ -62,8 +62,8 @@ $(function () {
         chunkRetry: 3,//网络问题上传失败后重试次数
         threads: 1, //上传并发数
         //fileNumLimit :1,
-        fileSizeLimit: 3 * 1024 * 1024 * 1024,//最大2GB
-        fileSingleSizeLimit: 3 * 1024 * 1024 * 1024,
+        // fileSizeLimit: 3 * 1024 * 1024 * 1024,//最大2GB
+        // fileSingleSizeLimit: 3 * 1024 * 1024 * 1024,
         resize: false//不压缩
         //选择文件类型
         //accept: {
