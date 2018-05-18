@@ -20,7 +20,7 @@
                     <input class="form-control" type="text" ng-model="fileName"
                            ng-click="chooseFile()" readonly placeholder="选择已有文件">
 
-                    <button class="btn btn-info upload_btn"><a href="/uploader" target="_black">上传新文件</a></button>
+                    <button class="btn btn-info upload_btn"><a ng-click="uploader()">上传新文件</a></button>
                 </div>
 
                 <!--<div class="form_line">-->

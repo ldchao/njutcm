@@ -64,6 +64,15 @@ define([''], function () {
                 $scope.fileList = FILE_DATA.filter(function (item) {
                     return (item.name.indexOf($scope.key) > -1 || item.type.indexOf($scope.key) > -1);
                 });
+            };
+
+            $scope.uploader = function () {
+                if (!commonService.auth()) {
+                    commonService.showMessage($scope, 'error', '请先登录');
+                    return;
+                }
+
+                window.open('/uploader');
             }
         }
 

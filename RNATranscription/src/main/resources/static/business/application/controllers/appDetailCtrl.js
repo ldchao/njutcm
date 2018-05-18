@@ -31,6 +31,12 @@ define([''], function () {
             };
 
             $scope.run = function () {
+
+                if (!commonService.auth()) {
+                    commonService.showMessage($scope, 'error', '请先登录');
+                    return;
+                }
+
                 var data = angular.copy($scope.taskModel);
 
                 if (!data.taskName) {
@@ -62,6 +68,14 @@ define([''], function () {
                 });
             };
 
+            $scope.uploader = function () {
+                if (!commonService.auth()) {
+                    commonService.showMessage($scope, 'error', '请先登录');
+                    return;
+                }
+
+                window.open('/uploader');
+            }
         }];
 
     var appModule = angular.module('application.config');

@@ -1,7 +1,8 @@
 <!-- Created by L.H.S on 2017/8/14. -->
+<div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
 
 <div class="table_container">
-    <button class="btn btn-primary upload_btn"><a href="/uploader" target="_black">上传文件</a></button>
+    <button class="btn btn-primary upload_btn"><a ng-click="uploader()">上传文件</a></button>
 
     <div class="input-group">
         <input type="text" class="form-control" placeholder="请输入关键字（文件名、类型）搜索..."

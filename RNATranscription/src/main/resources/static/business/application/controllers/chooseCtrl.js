@@ -8,22 +8,23 @@ define([''], function () {
     var chooseCtrl = ['$scope', '$uibModalInstance', '$timeout', 'commonService',
         function ($scope, $uibModalInstance, $timeout, commonService) {
 
-
-            $.ajax({
-                url: '/getFileByUser',
-                type: 'GET',
-                success: function (resp) {
-                    resp.forEach(function (item) {
-                       item.uploadAt_f = new Date(item.uploadAt).Format('yyyy-MM-dd hh:mm:ss');
-                    });
-                    $timeout(function () {
-                        $scope.fileList = resp;
-                    });
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            });
+            if (commonService.auth()) {
+                $.ajax({
+                    url: '/getFileByUser',
+                    type: 'GET',
+                    success: function (resp) {
+                        resp.forEach(function (item) {
+                            item.uploadAt_f = new Date(item.uploadAt).Format('yyyy-MM-dd hh:mm:ss');
+                        });
+                        $timeout(function () {
+                            $scope.fileList = resp;
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
 
             $scope.chosen;
 

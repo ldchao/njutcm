@@ -11,6 +11,10 @@
         <label for="{{$index}}">{{item.fileName}} <i>@{{item.uploadAt_f}}</i></label>
     </div>
 
+    <div class="no_data" ng-if="fileList.length==0||!fileList">
+        <i class="fa fa-info-circle"></i>
+        暂无数据
+    </div>
 </div>
 
 <div class="modal-footer">

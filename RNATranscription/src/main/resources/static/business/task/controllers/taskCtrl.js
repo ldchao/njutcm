@@ -47,7 +47,9 @@ define([''], function () {
             };
 
             /** 定时刷新 */
-            var refresh = $interval($scope.getTasks, 6 * 1000);
+            if (commonService.auth()) {
+                var refresh = $interval($scope.getTasks, 6 * 1000);
+            }
             $scope.$on('$destroy', function () {
                 $interval.cancel(refresh);
             });
@@ -55,29 +57,19 @@ define([''], function () {
                 $interval.cancel(refresh);
             });
             $(window).focus(function () { // 窗口获得焦点
-                refresh = $interval($scope.getTasks, 6 * 1000);
+                if (commonService.auth()) {
+                    refresh = $interval($scope.getTasks, 6 * 1000);
+                }
             });
 
-            // $scope.download = function (item) {
-            //     $.ajax({
-            //         url: '/download',
-            //         type: 'GET',
-            //         data: {
-            //             taskId: item.id
-            //         },
-            //         success: function (resp) {
-            //             if (resp != 'success') {
-            //                 $timeout(function () {
-            //                     commonService.showMessage($scope, 'error', resp);
-            //                 });
-            //             }
-            //         },
-            //         error: function (err) {
-            //             console.log(err);
-            //         }
-            //     });
-            // };
+            $scope.refreshBtn = function () {
+                if (!commonService.auth()) {
+                    commonService.showMessage($scope, 'error', '请先登录');
+                    return;
+                }
 
+                $scope.getTasks();
+            }
         }
 
     ];
