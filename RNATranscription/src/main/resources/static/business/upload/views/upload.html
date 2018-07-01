@@ -27,6 +27,8 @@
             <td>{{item.size}}B</td>
             <td>{{item.uploadAt_f}}</td>
             <td>
+                <a class="blue" ng-click="renameFile(item, $index)">重命名</a>
+                <a class="blue" ng-click="moveFile(item, $index)">移动</a>
                 <a class="red" ng-click="deleteFile(item, $index)">删除</a>
             </td>
         </tr>
@@ -44,5 +46,9 @@
     .input-group {
         width: calc(100% - 90px);
         float: right;
+    }
+
+    table tr td a {
+        margin-right: 5px;
     }
 </style>

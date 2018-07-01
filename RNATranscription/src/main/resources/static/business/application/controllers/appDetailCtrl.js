@@ -5,13 +5,17 @@
 define([''], function () {
     'use strict';
 
-    var appDetailCtrl = ['$scope', '$uibModal', 'commonService', '$state', '$timeout',
-        function ($scope, $uibModal, commonService, $state, $timeout) {
+    var appDetailCtrl = ['$scope', '$uibModal', 'commonService', '$state', '$timeout', 'appService',
+        function ($scope, $uibModal, commonService, $state, $timeout, appService) {
 
+            var appId = $state.params.id;
+            appService.getModel(appId);
+
+            // 数据类型
             $scope.taskModel = {
                 taskName: '',
-                type: 'all',
-                fileId: ''
+                type: 'all' // 默认填充
+                // fileId: ''
             };
 
             $scope.fileName = '';

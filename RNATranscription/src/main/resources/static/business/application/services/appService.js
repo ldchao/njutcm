@@ -77,20 +77,50 @@ define([''], function () {
                 {key: 'conditionFile', label: '条件文件', type: 'file'}
             ], // 10-3DPCA
             [
-
+                {key: 'matrix', label: '表达矩阵', type: 'file'},
+                {
+                    key: 'standard', label: '标准化', type: 'combox',
+                    options: [
+                        {label: 'row', value: 'row'},
+                        {label: 'column', value: 'column'},
+                        {label: 'none', value: 'none'}]
+                },
+                {
+                    key: 'color', label: '颜色', type: 'combox',
+                    options: [
+                        {label: 'green', value: 'green'},
+                        {label: 'white', value: 'white'},
+                        {label: 'black', value: 'black'}]
+                },
+                {
+                    key: 'isCluster', label: '样本是否聚类', type: 'combox',
+                    options: [
+                        {label: '聚类', value: 'cluster'},
+                        {label: '不聚类', value: 'no-cluster'}]
+                }
             ], // 11-pheatmap
             [
-
+                {key: 'heatMap', label: '热图矩阵', type: 'file'},
+                {key: 'scatterSize', label: '散点大小'},
+                {key: 'xWidth', label: 'X轴宽度'},
+                {key: 'yWidth', label: 'Y轴宽度'},
+                {key: 'padj', label: 'padj阈值设置'},
+                {
+                    key: 'color', label: '颜色', type: 'combox',
+                    options: [
+                        {label: 'green', value: 'green'},
+                        {label: 'white', value: 'white'},
+                        {label: 'black', value: 'black'}]
+                }
             ], // 12-Volcano
+            [], // 13-venn
             [
-
-            ], // 13-venn
-            [
-
+                {key: 'fileId', label: '基因文件', type: 'file'},
+                {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
+                {key: 'geneType', label: '基因类型'},
+                {key: 'ensembl', label: '目标转化类型'}
             ], // 14-IDconvert
-            [
-
-            ]  // 15-pie
+            []  // 15-pie
         ];
 
         service.getModel = function (index) {

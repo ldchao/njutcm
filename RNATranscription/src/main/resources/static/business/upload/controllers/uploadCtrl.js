@@ -9,7 +9,7 @@ define([''], function () {
         function ($scope, commonService, $timeout) {
 
             var FILE_DATA = [];
-            $scope.fileList = [];
+            $scope.fileList = [{}];
 
             function getFiles() {
                 $.ajax({
@@ -34,6 +34,17 @@ define([''], function () {
                 getFiles();
             }
 
+            // 重命名
+            $scope.renameFile = function (item, index) {
+
+            };
+
+            // 移动
+            $scope.moveFile = function (item, index) {
+
+            };
+
+            // 删除
             $scope.deleteFile = function (item, index) {
                 commonService.confirm('删除文件：' + item.fileName)
                     .result.then(function (resp) {
