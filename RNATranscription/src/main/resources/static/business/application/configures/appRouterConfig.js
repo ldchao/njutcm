@@ -24,7 +24,8 @@ define(['lazy-load/lazyLoad'],
                 controllers: [
                     'business/application/controllers/appDetailCtrl',
                     'business/application/controllers/chooseCtrl'
-                ]
+                ],
+                services: ['business/application/services/appService']
             }
         }];
 
