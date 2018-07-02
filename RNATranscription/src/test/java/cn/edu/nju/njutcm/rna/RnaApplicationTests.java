@@ -4,6 +4,7 @@ import cn.edu.nju.njutcm.rna.model.TaskEntity;
 import cn.edu.nju.njutcm.rna.service.FileService;
 import cn.edu.nju.njutcm.rna.service.TaskService;
 import cn.edu.nju.njutcm.rna.service.UserService;
+import cn.edu.nju.njutcm.rna.vo.FileVO;
 import cn.edu.nju.njutcm.rna.vo.TaskVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,13 +65,21 @@ public class RnaApplicationTests {
 	}
 	@Test
 	public void testGetResultPathById(){
-		System.out.println(taskService.getResultPathById(1));
+		System.out.println(taskService.getTaskEntityById(1).getTaskName());
 	}
 
 	@Test
 	public void addUser(){
 		userService.addUser("admin","123");
 		userService.addUser("test","123");
+	}
+
+	@Test
+	public void getFileList(){
+		List<FileVO> list=fileService.getByUserAndPath("admin","\\");
+		for (FileVO file:list) {
+			System.out.println(file.getFileName() + "_" + file.isDir() +"_" + file.getRelativePath());
+		}
 	}
 
 }

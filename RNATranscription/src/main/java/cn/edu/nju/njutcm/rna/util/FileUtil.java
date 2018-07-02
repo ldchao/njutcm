@@ -6,9 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -63,8 +61,8 @@ public class FileUtil {
 
     private final static List<UploadInfo> uploadInfoList = new ArrayList<>();
 
-    private static String Uploaded(String md5, String guid, String chunk, String chunks, String uploadFolderPath,
-                                   String fileName, String ext, HttpServletRequest request) throws Exception {
+    private static String uploaded(String md5, String guid, String chunk, String chunks, String uploadFolderPath,
+                                   String fileName, String name, String ext, HttpServletRequest request) throws Exception {
         synchronized (uploadInfoList) {
             if ((md5 != null && !md5.equals("")) && (chunks != null && !chunks.equals("")) && !isExist(md5, chunk)) {
                 uploadInfoList.add(new UploadInfo(md5, chunks, chunk, uploadFolderPath, fileName, ext));
@@ -74,7 +72,7 @@ public class FileUtil {
         int chunksNumber = Integer.parseInt(chunks);
 
         if (allUploaded) {
-            return mergeFile(chunksNumber, ext, guid, uploadFolderPath, request);
+            return mergeFile(chunksNumber, name,ext, guid, uploadFolderPath, request);
         }
         return null;
     }
@@ -113,13 +111,13 @@ public class FileUtil {
     }
 
     @SuppressWarnings("resource")
-    private static String mergeFile(int chunksNumber, String ext, String guid, String uploadFolderPath,
+    private static String mergeFile(int chunksNumber, String name, String ext, String guid, String uploadFolderPath,
                                     HttpServletRequest request) {
         /* 合并输入流 */
         String mergePath = uploadFolderPath;
 
         String destPath = getDestPath(request);// 文件路径
-        String newName = UUID.randomUUID().toString().replaceAll("-", "") + ext;// 文件新名称
+        String newName = getUploadFileName(destPath,name,ext);// 文件新名称
 
         SequenceInputStream s;
         InputStream s1;
@@ -200,21 +198,21 @@ public class FileUtil {
         }
     }
 
-    public static String savaFileInBlock(String guid, String md5value, String chunks, String chunk, String ext, MultipartFile file, String id,
+    public static String saveFileInBlock(String guid, String md5value, String chunks, String chunk,String name, String ext, MultipartFile file, String id,
                                          HttpServletRequest request) throws Exception {
 
-        String mergePath = ApplicationUtil.getInstance().getRootPath() + File.separator + "fileData"
+        String mergePath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"
                 + File.separator + getUsername(request) + File.separator + id + File.separator;
         // 将文件分块保存到临时文件夹里，便于之后的合并文件
         String fileName = chunk + ext;
         saveFile(mergePath, fileName, file, request);
         // 验证所有分块是否上传成功，成功的话进行合并
-        return Uploaded(md5value, guid, chunk, chunks, mergePath, fileName, ext, request);
+        return uploaded(md5value, guid, chunk, chunks, mergePath, fileName, name, ext, request);
     }
 
-    public static String savaFileNotInBlock(String ext, MultipartFile file, HttpServletRequest request) throws Exception {
+    public static String saveFileNotInBlock(String name,String ext, MultipartFile file, HttpServletRequest request) throws Exception {
         String destPath = getDestPath(request);
-        String newName = UUID.randomUUID().toString().replaceAll("-", "") + ext;// 文件新名称
+        String newName = getUploadFileName(destPath,name,ext);// 文件新名称
 
         // 上传文件没有分块的话就直接保存目标目录
         saveFile(destPath, newName, file, request);
@@ -222,42 +220,10 @@ public class FileUtil {
     }
 
     private static String getDestPath(HttpServletRequest request) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        Date date = new Date();
 
         String destPath = ApplicationUtil.getInstance().getRootPath() + File.separator
-                + "fileData" + File.separator+ getUsername(request) + File.separator
-                + simpleDateFormat.format(date) + File.separator;// 文件路径
+                + "data" + File.separator+ getUsername(request) + File.separator;// 文件路径
         return destPath;
-    }
-
-    public static boolean deleteUploadFile(String filePath) {
-        String dirPath = filePath.substring(0, filePath.lastIndexOf(File.separator) + 1);
-        return deleteFile(filePath) && deleteDir(dirPath);
-    }
-
-    private static boolean deleteFile(String filePath) {
-        File file = new File(filePath);
-        if (file.exists()) {
-
-            if (!file.delete()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean deleteDir(String dirPath) {
-        File file = new File(dirPath);
-
-        if (file.exists()) {
-            if (file.listFiles().length == 0) {
-                if (!file.delete()) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public static void makeSureDirExist(String dirPath) {
@@ -270,6 +236,116 @@ public class FileUtil {
     private static String getUsername(HttpServletRequest request) {
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return userVO == null ? "illegal" : userVO.getUsername();
+    }
+
+
+    private static String getUploadFileName(String path, String name, String ext){
+        if (!path.endsWith(File.separator))
+            path = path + File.separator;
+        makeSureDirExist(path);
+        File dirFile=new File(path);
+        File[] files = dirFile.listFiles();
+        ArrayList<String> fileNames=new ArrayList<String>();
+        for (File f:files) {
+            fileNames.add(f.getName());
+        }
+
+        int index=1;
+        String fileName = name.substring(0,name.lastIndexOf("."));
+        while(fileNames.contains(name)){
+            name=fileName + "_" + index+ext;
+            index++;
+        }
+        return name;
+    }
+
+    /**
+     * 删除文件，可以是文件或文件夹
+     *
+     * @param fileName 要删除的文件名
+     * @return 删除成功返回true，否则返回false
+     */
+    public static boolean delete(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            System.out.println("删除文件失败:" + fileName + "不存在！");
+            return false;
+        } else {
+            if (file.isFile())
+                return deleteFile(fileName);
+            else
+                return deleteDirectory(fileName);
+        }
+    }
+
+    /**
+     * 删除单个文件
+     *
+     * @param fileName  要删除的文件的文件名
+     * @return 单个文件删除成功返回true，否则返回false
+     */
+    public static boolean deleteFile(String fileName) {
+        File file = new File(fileName);
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists() && file.isFile()) {
+            if (file.delete()) {
+                System.out.println("删除单个文件" + fileName + "成功！");
+                return true;
+            } else {
+                System.out.println("删除单个文件" + fileName + "失败！");
+                return false;
+            }
+        } else {
+            System.out.println("删除单个文件失败：" + fileName + "不存在！");
+            return false;
+        }
+    }
+
+    /**
+     * 删除目录及目录下的文件
+     *
+     * @param dir 要删除的目录的文件路径
+     * @return 目录删除成功返回true，否则返回false
+     */
+    public static boolean deleteDirectory(String dir) {
+        // 如果dir不以文件分隔符结尾，自动添加文件分隔符
+        if (!dir.endsWith(File.separator))
+            dir = dir + File.separator;
+        File dirFile = new File(dir);
+        // 如果dir对应的文件不存在，或者不是一个目录，则退出
+        if ((!dirFile.exists()) || (!dirFile.isDirectory())) {
+            System.out.println("删除目录失败：" + dir + "不存在！");
+            return false;
+        }
+        boolean flag = true;
+        // 删除文件夹中的所有文件包括子目录
+        File[] files = dirFile.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            // 删除子文件
+            if (files[i].isFile()) {
+                flag = FileUtil.deleteFile(files[i].getAbsolutePath());
+                if (!flag)
+                    break;
+            }
+            // 删除子目录
+            else if (files[i].isDirectory()) {
+                flag = FileUtil.deleteDirectory(files[i]
+                        .getAbsolutePath());
+                if (!flag)
+                    break;
+            }
+        }
+        if (!flag) {
+            System.out.println("删除目录失败！");
+            return false;
+        }
+        // 删除当前目录
+        if (dirFile.delete()) {
+            System.out.println("删除目录" + dir + "成功！");
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

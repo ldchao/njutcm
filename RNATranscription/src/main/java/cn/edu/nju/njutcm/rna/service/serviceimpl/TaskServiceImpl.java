@@ -7,6 +7,8 @@ import cn.edu.nju.njutcm.rna.model.TaskEntity;
 import cn.edu.nju.njutcm.rna.service.TaskService;
 import cn.edu.nju.njutcm.rna.task.RNATranscriptionTask;
 import cn.edu.nju.njutcm.rna.task.ThreadPoolFactory;
+import cn.edu.nju.njutcm.rna.util.ApplicationUtil;
+import cn.edu.nju.njutcm.rna.util.ZipUtil;
 import cn.edu.nju.njutcm.rna.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.zip.ZipEntry;
 
 /**
  * Created by ldchao on 2018/5/12.
@@ -32,6 +36,11 @@ public class TaskServiceImpl implements TaskService {
     public String createTask(TaskEntity taskEntity) {
         TaskEntity result=taskDao.saveAndFlush(taskEntity);
         return startTask(result);
+    }
+
+    @Override
+    public boolean isTaskNameExist(String username, String taskName) {
+        return taskDao.countByUserEqualsAndTaskNameEquals(username,taskName) ==0 ? false:true;
     }
 
     @Override
@@ -59,9 +68,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public String getResultPathById(Integer id) {
-        TaskEntity taskEntity=taskDao.findOne(id);
-        return taskEntity.getResultFile();
+    public TaskEntity getTaskEntityById(Integer id) {
+        return taskDao.findOne(id);
     }
 
     private String startTask(TaskEntity taskEntity){
@@ -76,4 +84,19 @@ public class TaskServiceImpl implements TaskService {
         executorService.execute(transcriptionTask);
         return "success";
     }
+
+    @Override
+    public String zipResult(String path,String taskName) {
+        String zipPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "tmp"
+                + File.separator + UUID.randomUUID().toString().replace("-","");
+        ZipUtil.fileToZip(path,zipPath,taskName);
+        return zipPath + File.separator + taskName + ".zip";
+    }
+
+    @Override
+    public void deleteZipResult(String filePath) {
+        ZipUtil.deleteZipFile(filePath);
+    }
+
+
 }

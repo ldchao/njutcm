@@ -25,6 +25,7 @@ public class TaskController {
     //创建任务并运行
     @PostMapping("/createTask")
     public String createTask(HttpServletRequest request,String taskName,String type,Integer fileId){
+        // TODO: 2018/6/14 判断是否重名
         TaskEntity taskEntity=new TaskEntity();
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         taskEntity.setUser(userVO.getUsername());

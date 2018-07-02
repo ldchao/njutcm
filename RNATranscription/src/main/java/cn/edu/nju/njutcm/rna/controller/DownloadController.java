@@ -1,10 +1,15 @@
 package cn.edu.nju.njutcm.rna.controller;
 
+import cn.edu.nju.njutcm.rna.model.TaskEntity;
 import cn.edu.nju.njutcm.rna.service.TaskService;
+import cn.edu.nju.njutcm.rna.util.ApplicationUtil;
+import cn.edu.nju.njutcm.rna.util.ZipUtil;
+import cn.edu.nju.njutcm.rna.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 /**
  * Created by ldchao on 2018/5/13.
@@ -27,11 +33,41 @@ public class DownloadController {
     @RequestMapping("/download")
     public String downloadNet(HttpServletResponse response,Integer taskId) {
 
+        TaskEntity taskEntity = taskService.getTaskEntityById(taskId);
+        String path=taskService.zipResult(taskEntity.getResultFile(),taskEntity.getTaskName()); //打包结果文件
+
+        String result = downloadUtil(response,path);
+        taskService.deleteZipResult(path); //将打包的结果文件删除掉
+        return result;
+    }
+
+    @RequestMapping("/downloadFile")
+    public String downloadFile(String relativePath, HttpServletRequest request,HttpServletResponse response) {
+        UserVO userVO = (UserVO) request.getSession().getAttribute("User");
+        String rootPath = ApplicationUtil.getInstance().getRootPath()+ File.separator + userVO.getUsername();
+        String path = rootPath + relativePath;
+        File file = new File(path);
+        String result;
+        if(file.isDirectory()){
+            String zipPath = rootPath + File.separator + "tmp"
+                + File.separator + UUID.randomUUID().toString().replace("-","");
+            String zipFileName = relativePath.substring(relativePath.lastIndexOf(File.separator)+1);
+            ZipUtil.fileToZip(path,zipPath,zipFileName);
+            zipPath = zipPath + File.separator + zipFileName + ".zip";
+            result = downloadUtil(response,zipPath);
+            taskService.deleteZipResult(zipPath); //将打包的文件删除掉
+        }else{
+            result = downloadUtil(response,path);
+        }
+        return result;
+    }
+
+    private String downloadUtil(HttpServletResponse response,String path) {
+
         InputStream fis = null;
         OutputStream out = null;
 
         try {
-            String path = taskService.getResultPathById(taskId);
             File file = new File(path);
             if (file.exists()) {
                 String filename = file.getName();
@@ -50,7 +86,6 @@ public class DownloadController {
 
                 }
                 return "success";
-
             } else {
                 return "not find the file";
             }

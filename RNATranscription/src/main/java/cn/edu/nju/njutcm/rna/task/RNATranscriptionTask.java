@@ -44,8 +44,8 @@ public class RNATranscriptionTask implements Runnable {
             fileName = fileName.substring(0, typeSplit);
         }
 
-        String resultDir = ApplicationUtil.getInstance().getRootPath() +File.separator+ "result" + File.separator
-                + taskEntity.getUser() + File.separator + taskEntity.getId() + File.separator;
+        String resultDir = ApplicationUtil.getInstance().getRootPath() + File.separator+ "data" + File.separator
+                + taskEntity.getUser() + File.separator+ "result" + File.separator + taskEntity.getTaskName() + File.separator;
         FileUtil.makeSureDirExist(resultDir);
 //        try {
 //            Thread.sleep(20000);
@@ -64,7 +64,7 @@ public class RNATranscriptionTask implements Runnable {
             Boolean result = ps.waitFor(60, TimeUnit.MINUTES);
             if (result) {
                 taskEntity.setStatus("success");
-                taskEntity.setResultFile(resultDir + fileName + "_fastqc.zip");
+                taskEntity.setResultFile(resultDir);
                 taskEntity.setEndAt(new Timestamp(System.currentTimeMillis()));
             } else {
                 taskEntity.setStatus("overtime");
