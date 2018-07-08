@@ -10,33 +10,33 @@
     <div class="col-md-6">
         <div class="app_detail_config">
             <div class="task_config_container">
-                <div class="form_line">
-                    <label>任务名</label>
-                    <input class="form-control" type="text" ng-model="taskModel.taskName">
+
+                <div class="form_line" ng-repeat="item in formModel track by $index">
+                    <label>{{item.label}}</label>
+
+                    <!-- text -->
+                    <input ng-if="!item.type" class="form-control" type="text" ng-model="taskModel[item.key]">
+
+                    <!-- combox -->
+                    <div class="btn-group" ng-if="item.type=='combox'">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            {{taskModel[item.key].label}}
+                            &nbsp;<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="op in item.options track by $index" ng-click="comboxSelect(item.key, op)">
+                                <a>{{op.label}}</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- file -->
+                    <input class="form-control" type="text" ng-model="fileNameModel[item.key]" ng-if="item.type=='file'"
+                           ng-click="chooseFile(item.key)" readonly placeholder="选择已有文件">
+
+                    <button class="btn btn-info upload_btn" ng-if="item.type=='file'"><a ng-click="uploader()">上传新文件</a>
+                    </button>
+
                 </div>
-
-                <div class="form_line">
-                    <label>选择文件</label>
-                    <input class="form-control" type="text" ng-model="fileName"
-                           ng-click="chooseFile()" readonly placeholder="选择已有文件">
-
-                <button class="btn btn-info upload_btn"><a ng-click="uploader()">上传新文件</a></button>
-            </div>
-
-            <!--<div class="form_line">-->
-            <!--<label>文件格式</label>-->
-            <!--<div class="btn-group">-->
-            <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">-->
-            <!--Action <span class="caret"></span>-->
-            <!--</button>-->
-                        <!--<ul class="dropdown-menu">-->
-                            <!--<li><a href="#">Action</a></li>-->
-                            <!--<li><a href="#">Another action</a></li>-->
-                            <!--<li><a href="#">Something else here</a></li>-->
-                            <!--<li><a href="#">Separated link</a></li>-->
-                        <!--</ul>-->
-                    <!--</div>-->
-                <!--</div>-->
 
                 <button class="btn btn-primary submit" ng-click="run()">提交</button>
             </div>
@@ -81,7 +81,7 @@
     }
 
     .task_config_container .form_line {
-        width: 340px;
+        width: 380px;
         margin-left: 0;
     }
 
@@ -97,4 +97,20 @@
     .upload_btn {
         float: right;
     }
+
+    .form_line button.dropdown-toggle {
+        text-align: left;
+        width: 180px;
+    }
+
+    .form_line button span.caret {
+        float: right;
+        position: relative;
+        top: 8px;
+    }
+
+    .form_line label {
+        width: 100px;
+    }
+
 </style>

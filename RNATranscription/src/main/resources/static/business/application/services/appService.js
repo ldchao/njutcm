@@ -10,9 +10,9 @@ define([''], function () {
         var service = this;
 
         var speciesOpt = [
-            {label: 'human', value: '人类'},
-            {label: 'mouse', value: '小鼠'},
-            {label: 'rat', value: '大鼠'}
+            {value: 'human', label: '人类'},
+            {value: 'mouse', label: '小鼠'},
+            {value: 'rat', label: '大鼠'}
         ];
 
         /** taskName必填: 任务名
