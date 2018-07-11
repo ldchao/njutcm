@@ -20,7 +20,7 @@ public class TaskEntity {
     private String taskName;
     private String type;
     private Timestamp startAt;
-    private Integer fileId;
+    private String taskCode;
     private String resultFile;
     private Timestamp endAt;
     private String status;
@@ -77,13 +77,13 @@ public class TaskEntity {
     }
 
     @Basic
-    @Column(name = "file_id")
-    public Integer getFileId() {
-        return fileId;
+    @Column(name = "task_code")
+    public String getTaskCode() {
+        return taskCode;
     }
 
-    public void setFileId(Integer fileId) {
-        this.fileId = fileId;
+    public void setTaskCode(String taskCode) {
+        this.taskCode = taskCode;
     }
 
     @Basic
@@ -128,7 +128,7 @@ public class TaskEntity {
         if (taskName != null ? !taskName.equals(that.taskName) : that.taskName != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (startAt != null ? !startAt.equals(that.startAt) : that.startAt != null) return false;
-        if (fileId != null ? !fileId.equals(that.fileId) : that.fileId != null) return false;
+        if (taskCode != null ? !taskCode.equals(that.taskCode) : that.taskCode != null) return false;
         if (resultFile != null ? !resultFile.equals(that.resultFile) : that.resultFile != null) return false;
         if (endAt != null ? !endAt.equals(that.endAt) : that.endAt != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
@@ -143,7 +143,7 @@ public class TaskEntity {
         result = 31 * result + (taskName != null ? taskName.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (startAt != null ? startAt.hashCode() : 0);
-        result = 31 * result + (fileId != null ? fileId.hashCode() : 0);
+        result = 31 * result + (taskCode != null ? taskCode.hashCode() : 0);
         result = 31 * result + (resultFile != null ? resultFile.hashCode() : 0);
         result = 31 * result + (endAt != null ? endAt.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);

@@ -50,7 +50,7 @@ public class RnaApplicationTests {
 		taskEntity.setTaskName("test");
 		taskEntity.setType("all");
 		taskEntity.setStartAt(new Timestamp(System.currentTimeMillis()));
-		taskEntity.setFileId(1);
+		taskEntity.setTaskCode("ls");
 		taskEntity.setStatus("queuing");
 		System.out.println(taskService.createTask(taskEntity));
 	}

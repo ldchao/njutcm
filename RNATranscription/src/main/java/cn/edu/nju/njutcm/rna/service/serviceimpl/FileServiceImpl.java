@@ -47,7 +47,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<FileVO> getByUserAndPath(String username, String relativePath) {
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + username;
+        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
         String dirPath = rootPath + relativePath;
         if (!dirPath.endsWith(File.separator))
             dirPath = dirPath + File.separator;
@@ -70,7 +70,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String deleteFile(String username, String relativePath) {
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + username;
+        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
         String filePath = rootPath + relativePath;
         return FileUtil.delete(filePath) ? "success" : "fail";
     }
@@ -78,7 +78,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String changeFilePath(String username, String oldPath, String newPath) {
 
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + username;
+        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
         String oldFilePath = rootPath + oldPath;
         String newFilePath = rootPath + newPath;
         if(!newFilePath.endsWith(File.separator)){
@@ -90,7 +90,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String renameFile(String username, String oldPath, String newName) {
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + username;
+        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
         String oldFilePath = rootPath + oldPath;
         String newFilePath = oldFilePath.substring(0,oldFilePath.lastIndexOf(File.separator)+1)+newName;
         return rename(oldFilePath,newFilePath);

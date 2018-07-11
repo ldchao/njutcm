@@ -9,7 +9,7 @@ define([''], function () {
         function ($scope, $uibModal, commonService, $state, $timeout, appService) {
 
             var appId = $state.params.id;
-            appService.getModel(appId);
+            $scope.formModel = appService.getModel(appId);  // 表单模型
 
             // 数据类型
             $scope.taskModel = {
@@ -18,9 +18,19 @@ define([''], function () {
                 // fileId: ''
             };
 
-            $scope.fileName = '';
+            // 将表单模型填充到数据类型
+            $scope.formModel.forEach(function (item) {
+                $scope.taskModel[item.key] = '';
+            });
 
-            $scope.chooseFile = function () {
+            // combox选择
+            $scope.comboxSelect = function (key, option) {
+                $scope.taskModel[key] = option;
+            };
+
+            $scope.fileNameModel = {};
+
+            $scope.chooseFile = function (key) {
                 var chooseModal = $uibModal.open({
                     animation: true,
                     backdrop: 'static',
@@ -29,11 +39,12 @@ define([''], function () {
                 });
 
                 chooseModal.result.then(function (data) {
-                    $scope.taskModel.fileId = data.id;
-                    $scope.fileName = data.fileName;
+                    $scope.taskModel[key] = data.id;
+                    $scope.fileNameModel[key] = data.fileName;
                 });
             };
 
+            /** combox的值为option，需要取其中的value */
             $scope.run = function () {
 
                 if (!commonService.auth()) {

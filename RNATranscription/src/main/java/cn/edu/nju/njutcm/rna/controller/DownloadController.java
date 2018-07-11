@@ -34,17 +34,25 @@ public class DownloadController {
     public String downloadNet(HttpServletResponse response,Integer taskId) {
 
         TaskEntity taskEntity = taskService.getTaskEntityById(taskId);
-        String path=taskService.zipResult(taskEntity.getResultFile(),taskEntity.getTaskName()); //打包结果文件
+        String resultFile=taskEntity.getResultFile();
+        File file = new File(resultFile);
+        String result;
+        if(file.isDirectory()){
+            String path=taskService.zipResult(taskEntity.getResultFile(),taskEntity.getTaskName()); //打包结果文件
 
-        String result = downloadUtil(response,path);
-        taskService.deleteZipResult(path); //将打包的结果文件删除掉
+            result = downloadUtil(response,path);
+            taskService.deleteZipResult(path); //将打包的结果文件删除掉
+        }else{
+            result = downloadUtil(response,resultFile);
+        }
+
         return result;
     }
 
     @RequestMapping("/downloadFile")
     public String downloadFile(String relativePath, HttpServletRequest request,HttpServletResponse response) {
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
-        String rootPath = ApplicationUtil.getInstance().getRootPath()+ File.separator + userVO.getUsername();
+        String rootPath = ApplicationUtil.getInstance().getRootPath()+ File.separator + "data"+ File.separator + userVO.getUsername();
         String path = rootPath + relativePath;
         File file = new File(path);
         String result;

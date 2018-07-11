@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by ldchao on 2018/5/13.
  */
-public class FastQCTask implements Runnable {
+public class TaskThread implements Runnable {
 
 
     private Integer id;
     private TaskDao taskDao;
 
-    public FastQCTask(Integer id, TaskDao taskDao) {
+    public TaskThread(Integer id, TaskDao taskDao) {
         this.id = id;
         this.taskDao = taskDao;
     }
@@ -35,16 +35,6 @@ public class FastQCTask implements Runnable {
         //更新状态
         taskEntity.setStatus("executing");
         taskDao.saveAndFlush(taskEntity);
-
-//        try {
-//            Thread.sleep(20000);
-//            taskEntity.setStatus("success");
-//            taskEntity.setResultFile(inputFile);
-//            taskEntity.setEndAt(new Timestamp(System.currentTimeMillis()));
-//
-//        } catch (InterruptedException e) {
-//            taskEntity.setStatus("fail");
-//        }
 
         //执行命令
         try {
@@ -60,7 +50,6 @@ public class FastQCTask implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
             StringBuffer sb = new StringBuffer();
             String line;
-
 
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");

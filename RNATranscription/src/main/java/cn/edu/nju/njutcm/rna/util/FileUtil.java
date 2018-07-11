@@ -222,7 +222,7 @@ public class FileUtil {
     private static String getDestPath(HttpServletRequest request) {
 
         String destPath = ApplicationUtil.getInstance().getRootPath() + File.separator
-                + "data" + File.separator+ getUsername(request) + File.separator;// 文件路径
+                + "data" + File.separator+ getUsername(request) + request.getParameter("relativePath") + File.separator ;// 文件路径
         return destPath;
     }
 

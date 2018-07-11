@@ -2,10 +2,9 @@ package cn.edu.nju.njutcm.rna.service.serviceimpl;
 
 import cn.edu.nju.njutcm.rna.dao.FileDao;
 import cn.edu.nju.njutcm.rna.dao.TaskDao;
-import cn.edu.nju.njutcm.rna.model.FileEntity;
 import cn.edu.nju.njutcm.rna.model.TaskEntity;
 import cn.edu.nju.njutcm.rna.service.TaskService;
-import cn.edu.nju.njutcm.rna.task.RNATranscriptionTask;
+import cn.edu.nju.njutcm.rna.task.TaskThread;
 import cn.edu.nju.njutcm.rna.task.ThreadPoolFactory;
 import cn.edu.nju.njutcm.rna.util.ApplicationUtil;
 import cn.edu.nju.njutcm.rna.util.ZipUtil;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
-import java.util.zip.ZipEntry;
 
 /**
  * Created by ldchao on 2018/5/12.
@@ -73,13 +71,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private String startTask(TaskEntity taskEntity){
-        FileEntity fileEntity=fileDao.findOne(taskEntity.getFileId());
-        String inputFilePath=fileEntity.getSavepath();
-        File inputFile=new File(inputFilePath);
-        if(!inputFile.exists()){
-            return "file not exist";
-        }
-        RNATranscriptionTask transcriptionTask=new RNATranscriptionTask(taskEntity.getId(),inputFilePath,taskDao);
+
+        TaskThread transcriptionTask=new TaskThread(taskEntity.getId(),taskDao);
         ExecutorService executorService= ThreadPoolFactory.getExecutorService();
         executorService.execute(transcriptionTask);
         return "success";
