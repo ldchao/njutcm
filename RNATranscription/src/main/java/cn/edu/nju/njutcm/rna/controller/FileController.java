@@ -23,32 +23,24 @@ public class FileController {
     @Autowired
     FileService fileService;
 
-    //查看当前用户的所有文件（按时间排序）【不区分层次】
-    @GetMapping(value = "/getFileByUser")
-    public List<FileEntity> getFileListByUser(HttpServletRequest request){
-        UserVO userVO = (UserVO) request.getSession().getAttribute("User");
-        return fileService.getByUser(userVO.getUsername());
-    }
-
-    //删除文件
-    @DeleteMapping(value = "/deleteFileById")
-    public String deleteFile(Integer fileId){
-        return fileService.deleteFileById(fileId);
-    }
-
-    //根据路径，获取路径下所有文件和文件夹
+    /**
+     * 根据路径，获取路径下所有文件和文件夹
+     * @param relativePath 相对路径，从FileVO中获取，根目录直接传""
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/getFile")
     public List<FileVO> getFileList(String relativePath,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.getByUserAndPath(userVO.getUsername(),relativePath);
     }
 
-//    @GetMapping(value = "/testGetFile")
-//    public List<FileVO> testGetFile(){
-//        return fileService.getByUserAndPath("admin","\\");
-//    }
-
-    //根据相对路径删除文件或文件夹
+    /**
+     * 根据相对路径删除文件或文件夹
+     * @param relativePath 相对路径，从FileVO中获取，根目录直接传""
+     * @param request
+     * @return
+     */
     @DeleteMapping(value = "/deleteFile")
     public String deleteFile(String relativePath,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
@@ -57,14 +49,26 @@ public class FileController {
 
     //根据相对路径下载文件或文件夹【参见DownloadController】
 
-    //根据原文件相对路径，将文件或文件夹移动到目的路径下
+    /**
+     * 根据原文件相对路径，将文件或文件夹移动到目的路径下
+     * @param oldPath 文件相对路径，从FileVO中获取，根目录直接传""
+     * @param newPath 目的文件夹相对路径，从FileVO中获取，根目录直接传""
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/changeFilePath")
     public String changeFilePath(String oldPath,String newPath,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.changeFilePath(userVO.getUsername(),oldPath,newPath);
     }
 
-    //根据相对路径将文件或文件夹重命名
+    /**
+     * 根据相对路径将文件或文件夹重命名
+     * @param oldPath 文件相对路径，从FileVO中获取，根目录直接传""
+     * @param newName 新的文件名
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/renameFile")
     public String renameFile(String oldPath,String newName ,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
