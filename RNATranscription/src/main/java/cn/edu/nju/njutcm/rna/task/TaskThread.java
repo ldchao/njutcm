@@ -17,16 +17,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by ldchao on 2018/5/13.
  */
-public class RNATranscriptionTask implements Runnable {
+public class FastQCTask implements Runnable {
 
 
     private Integer id;
-    private String inputFile;
     private TaskDao taskDao;
 
-    public RNATranscriptionTask(Integer id, String inputFile, TaskDao taskDao) {
+    public FastQCTask(Integer id, TaskDao taskDao) {
         this.id = id;
-        this.inputFile = inputFile;
         this.taskDao = taskDao;
     }
 
@@ -38,15 +36,6 @@ public class RNATranscriptionTask implements Runnable {
         taskEntity.setStatus("executing");
         taskDao.saveAndFlush(taskEntity);
 
-        String fileName = inputFile.substring(inputFile.lastIndexOf(File.separator) + 1);
-        int typeSplit = fileName.lastIndexOf(".");
-        if (typeSplit != -1) {
-            fileName = fileName.substring(0, typeSplit);
-        }
-
-        String resultDir = ApplicationUtil.getInstance().getRootPath() + File.separator+ "data" + File.separator
-                + taskEntity.getUser() + File.separator+ "result" + File.separator + taskEntity.getTaskName() + File.separator;
-        FileUtil.makeSureDirExist(resultDir);
 //        try {
 //            Thread.sleep(20000);
 //            taskEntity.setStatus("success");
@@ -59,12 +48,11 @@ public class RNATranscriptionTask implements Runnable {
 
         //执行命令
         try {
-            String cmd = "fastqc -f fastq -o " + resultDir + " " + inputFile;
+            String cmd =taskEntity.getTaskCode();
             Process ps = Runtime.getRuntime().exec(cmd);
-            Boolean result = ps.waitFor(60, TimeUnit.MINUTES);
+            Boolean result = ps.waitFor(10, TimeUnit.DAYS);
             if (result) {
                 taskEntity.setStatus("success");
-                taskEntity.setResultFile(resultDir);
                 taskEntity.setEndAt(new Timestamp(System.currentTimeMillis()));
             } else {
                 taskEntity.setStatus("overtime");
