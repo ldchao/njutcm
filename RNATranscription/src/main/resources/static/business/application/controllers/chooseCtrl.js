@@ -10,7 +10,7 @@ define([''], function () {
 
             if (commonService.auth()) {
                 $scope.fileList = [{
-                    fileName: '根目录',
+                    fileName: 'root',
                     relativePath: '',
                     dir: true,
                     children: []
@@ -27,7 +27,9 @@ define([''], function () {
                     url: '/getFile?relativePath=' + node.relativePath,
                     type: 'GET',
                     success: function (resp) {
-                        node.children = resp;
+                        $timeout(function () {
+                            node.children = resp;
+                        });
                     },
                     error: function (err) {
                         console.log(err);

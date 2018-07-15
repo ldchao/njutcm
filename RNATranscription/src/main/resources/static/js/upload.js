@@ -2,6 +2,12 @@ $(function () {
     $list = $('#fileList');
     var flie_count = 0;
 
+    // 文件夹路径参数
+
+    var urlParam = location.search.substring(1);
+    var curPath = urlParam.substring(urlParam.indexOf('=') + 1);
+    $("#relativePath").html("root" + curPath);
+
     WebUploader.Uploader.register({
             "before-send": "beforeSend"  //每个分片上传前
         },
@@ -144,7 +150,7 @@ $(function () {
         console.info("input file= " + flie_count);
         // 将存在file对象中的md5数据携带发送过去。
         data.md5value = fileMd5;//md5
-        data.relativePath = '';
+        data.relativePath = curPath;
         /** 重命名 */
         // data.fileName_ = $("#rename_" + file.id).val();
         // console.log("fileName_: " + data.fileName_);

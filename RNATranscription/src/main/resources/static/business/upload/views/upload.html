@@ -7,7 +7,7 @@
 
     <div class="input-group">
         <input type="text" class="form-control" placeholder="请输入关键字（文件名、类型）搜索..."
-               ng-model="key" ng-keydown="keyDown()">
+               ng-model="key" ng-change="search()">
         <span class="input-group-btn">
         <button class="btn btn-default" type="button" ng-click="search()"><i class="fa fa-search"></i></button>
       </span>
@@ -37,6 +37,7 @@
         <tr ng-repeat="item in fileList track by $index">
             <td>
                 <i ng-if="item.dir" class="fa fa-folder-open"></i>
+                <i ng-if="!item.dir" class="fa fa-file-alt"></i>
                 <a ng-click="fileClick(item)">{{item.fileName}}</a>
             </td>
             <td>{{item.size?item.size:"-"}}B</td>
@@ -68,7 +69,7 @@
         margin-right: 5px;
     }
 
-    .fa-folder-open {
+    .fa-folder-open, .fa-file-alt {
         color: #999;
     }
 </style>

@@ -39,7 +39,7 @@ define([''], function () {
                 });
 
                 chooseModal.result.then(function (data) {
-                    $scope.taskModel[key] = data.id;
+                    $scope.taskModel[key] = data.relativePath;
                     $scope.fileNameModel[key] = data.fileName;
                 });
             };

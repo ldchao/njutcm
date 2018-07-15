@@ -40,14 +40,14 @@ define([''], function () {
             }
 
             // 目录路径
-            $scope.dirs = [{label: '根目录', path: ""}];
+            $scope.dirs = [{label: 'root', path: ""}];
 
             // 处理路径
             function dealPath(path) {
 
                 var pathArr = path.split("/");
                 pathArr.splice(0, 1); // 去除首个空串
-                var temp = [{label: '根目录', path: ''}];
+                var temp = [{label: 'root', path: ''}];
                 pathArr.forEach(function (item, index) {
                     var curTemp = pathArr.slice(0, index + 1);
                     temp.push({
@@ -191,11 +191,11 @@ define([''], function () {
 
             $scope.key = '';
 
-            $scope.keyDown = function () {
-                if (event.keyCode == 13) {
-                    $scope.search();
-                }
-            };
+            // $scope.keyDown = function () {
+            //     if (event.keyCode == 13) {
+            //         $scope.search();
+            //     }
+            // };
 
             $scope.search = function () {
                 $scope.fileList = FILE_DATA.filter(function (item) {
@@ -209,7 +209,8 @@ define([''], function () {
                     return;
                 }
 
-                window.open('/uploader');
+                var curPath = $scope.dirs[$scope.dirs.length - 1].path;
+                window.open('/uploader?relativePath=' + curPath);
             }
         }
 
