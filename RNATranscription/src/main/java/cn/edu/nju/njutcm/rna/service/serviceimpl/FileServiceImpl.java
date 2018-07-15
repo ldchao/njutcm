@@ -63,6 +63,8 @@ public class FileServiceImpl implements FileService {
             fileVO.setFileName(f.getName());
             fileVO.setDir(f.isDirectory());
             fileVO.setRelativePath(relativePath + File.separator + f.getName());
+            fileVO.setSize(f.length());
+            fileVO.setLastModifiedTime(f.lastModified());
             fileList.add(fileVO);
         }
         return fileList;
@@ -111,4 +113,20 @@ public class FileServiceImpl implements FileService {
         return result;
     }
 
+    @Override
+    public String creatDir(String username, String relativePath, String dirName) {
+        String rootPath = ApplicationUtil.getInstance().getRootPath() +
+                File.separator + "data"+ File.separator + username;
+        String parentPath = rootPath + relativePath;
+        if(!parentPath.endsWith(File.separator)){
+            parentPath +=File.separator;
+        }
+        String dirPath=parentPath + dirName;
+        File file = new File(dirPath);
+        if (!file.exists()) {
+            file.mkdirs();
+            return "success";
+        }
+        return "dirExist";
+    }
 }

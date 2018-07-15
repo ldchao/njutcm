@@ -8,6 +8,8 @@ public class FileVO {
     private String fileName;
     private boolean isDir;
     private String relativePath;
+    private long lastModifiedTime;
+    private long size;
 
     public FileVO() {
     }
@@ -34,5 +36,21 @@ public class FileVO {
 
     public void setRelativePath(String relativePath) {
         this.relativePath = relativePath;
+    }
+
+    public long getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
+    public void setLastModifiedTime(long lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 }

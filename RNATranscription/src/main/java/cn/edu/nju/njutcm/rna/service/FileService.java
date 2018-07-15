@@ -23,4 +23,6 @@ public interface FileService {
     public String changeFilePath(String username,String oldPath,String newPath);
 
     public String renameFile(String username,String oldPath,String newName);
+
+    String creatDir(String username,String relativePath,String dirName);
 }

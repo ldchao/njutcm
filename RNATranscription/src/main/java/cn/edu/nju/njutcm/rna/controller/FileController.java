@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -75,4 +76,16 @@ public class FileController {
         return fileService.renameFile(userVO.getUsername(),oldPath,newName);
     }
 
+    /**
+     * 在相对路径下新建文件夹
+     * @param relativePath 文件相对路径，从FileVO中获取，根目录直接传""
+     * @param dirName 文件夹名字
+     * @param request
+     * @return dirExist或success，分别表示存在重名文件夹，成功
+     */
+    @PostMapping(value = "/creatDir")
+    public String creatDir(String relativePath,String dirName ,HttpServletRequest request){
+        UserVO userVO = (UserVO) request.getSession().getAttribute("User");
+        return fileService.creatDir(userVO.getUsername(),relativePath,dirName);
+    }
 }
