@@ -29,7 +29,7 @@ define(['lazy-load/lazyLoad'],
             }
         }];
 
-        var appModule = angular.module('application.config', ['ui.router']);
+        var appModule = angular.module('application.config', ['ui.router', 'treeControl']);
         appModule = lazyLoadModule.makeLazy(appModule);
         // stateConfig属性配置路由状态基本信息；urlMatch属性配置异常url对应的url路径
         appModule.StateConfig({

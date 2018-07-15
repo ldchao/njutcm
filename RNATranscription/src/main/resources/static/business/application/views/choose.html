@@ -1,4 +1,7 @@
 <!-- Created by L.H.S on 2018/5/7. -->
+<link type="text/css" href="/theme/tree/tree-control.css" rel="stylesheet">
+<link type="text/css" href="/theme/tree/tree-control-attribute.css" rel="stylesheet">
+
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">选择文件</h3>
     <div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
@@ -6,40 +9,41 @@
 
 <div class="modal-body" id="modal-body">
 
-    <div class="choose_each_file" ng-repeat="item in fileList track by $index">
-        <input name="chooseFile" id="{{$index}}" type="radio" ng-value="$index" ng-model="$parent.chosen">
-        <label for="{{$index}}">{{item.fileName}} <i>@{{item.uploadAt_f}}</i></label>
-    </div>
+    <treecontrol class="tree-light" tree-model="fileList"
+                 on-selection="getFiles(node)"
+                 selected-node="selectedFile">
+         <span ng-switch="" on="node.isDir">
+             <span ng-switch-when="true" class="fa fa-folder-open" aria-hidden="true"></span>
+             <span ng-switch-when="false" class="fa fa-file" aria-hidden="true"></span>
+         </span> {{node.fileName}}
+    </treecontrol>
 
-    <div class="no_data" ng-if="fileList.length==0||!fileList">
-        <i class="fa fa-info-circle"></i>
-        暂无数据
-    </div>
 </div>
 
 <div class="modal-footer">
+    <span class="preview">已选择: <span>{{selectedFile.relativePath + " - " + selectedFile.fileName}}</span></span>
     <button class="btn btn-primary" type="button" ng-click="ok()">选择</button>
     <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
 </div>
 
 <style>
-    .choose_each_file {
-        margin-left: 15px;
-    }
-
-    .choose_each_file label {
-        font-weight: 400;
-        margin-left: 5px;
-    }
-
-    .choose_each_file label i {
-        margin-left: 10px;
-        font-size: 12px;
-        color: #999;
-    }
-
     .modal-body {
         max-height: 500px;
         overflow: auto;
+    }
+
+    .modal-body {
+        max-height: 450px;
+        overflow: auto;
+    }
+
+    .modal-footer .preview {
+        float: left;
+        line-height: 30px;
+    }
+
+    .modal-footer .preview span {
+        font-weight: bold;
+        margin-left: 5px;
     }
 </style>

@@ -1,0 +1,18 @@
+<!-- Created by L.H.S on 2018/5/7. -->
+<div class="message" ng-class="message.cls" ng-show="message">{{message.content}}</div>
+
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title"><i class="fa fa-info-circle"></i>请输入</h3>
+</div>
+
+<div class="modal-body" id="modal-body">
+    <div class="form_line" style="width: 320px;">
+        <label style="width: 70px;">{{formModel.label}}</label>
+        <input class="form-control" type="text" ng-model="dataModel[formModel.key]">
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">确认</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+</div>

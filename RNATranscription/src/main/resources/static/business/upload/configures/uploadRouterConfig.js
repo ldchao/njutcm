@@ -13,7 +13,10 @@ define(['lazy-load/lazyLoad'],
             templateUrl: 'business/upload/views/upload.html',
             controller: 'upload.ctrl',
             scripts: {
-                controllers: ['business/upload/controllers/uploadCtrl']
+                controllers: [
+                    'business/upload/controllers/uploadCtrl',
+                    'business/upload/controllers/inputModalCtrl'
+                ]
             }
         }];
 

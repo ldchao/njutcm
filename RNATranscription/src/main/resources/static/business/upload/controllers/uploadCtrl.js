@@ -5,24 +5,25 @@
 define([''], function () {
     'use strict';
 
-    var uploadCtrl = ['$scope', 'commonService', '$timeout',
-        function ($scope, commonService, $timeout) {
+    var uploadCtrl = ['$scope', 'commonService', '$timeout', '$uibModal',
+        function ($scope, commonService, $timeout, $uibModal) {
 
             var FILE_DATA = [];
-            $scope.fileList = [{}];
+            $scope.fileList = [{fileName: 'test', isDir: true}];
 
-            function getFiles() {
+            function getFiles(path) {
                 $.ajax({
-                    url: '/getFileByUser',
+                    url: '/getFile?relativePath=' + path,
                     type: 'GET',
                     success: function (resp) {
                         resp.forEach(function (item) {
-                            item.uploadAt_f = new Date(item.uploadAt).Format("yyyy-MM-dd hh:mm:ss");
+                            item.uploadAt_f = new Date(item.lastModifiedTime).Format("yyyy-MM-dd hh:mm:ss");
                         });
                         FILE_DATA = resp;
                         $timeout(function () {
                             $scope.fileList = resp;
                         });
+                        dealPath(path);
                     },
                     error: function (err) {
                         console.log(err)
@@ -30,12 +31,99 @@ define([''], function () {
                 });
             }
 
-            if (commonService.auth()) {
-                getFiles();
+            // 目录路径
+            $scope.dirs = [{label: '根目录', path: ''}];
+
+            // 处理路径
+            function dealPath(path) {
+                var pathArr = path.split("\\");
+                var temp = [{label: '根目录', path: ''}];
+                pathArr.forEach(function (item, index) {
+                    var curTemp = pathArr.splice(0, index + 1);
+                    temp.push({
+                        label: item,
+                        path: curTemp.join("\\")
+                    });
+                });
+                $scope.dirs = temp;
             }
+
+            if (commonService.auth()) {
+                getFiles("");
+            }
+
+            // 新建文件夹
+            $scope.newFolder = function () {
+                if (!commonService.auth()) {
+                    commonService.showMessage($scope, 'error', '请先登录');
+                    return;
+                }
+
+                var inputModal = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'business/upload/views/inputModal.html',
+                    controller: 'inputModalCtrl',
+                    resolve: {
+                        formModel: function () {
+                            return {
+                                label: '文件夹名称',
+                                key: 'folderName'
+                            };
+                        }
+                    }
+                });
+
+                inputModal.result.then(function (data) {
+
+                });
+
+            };
+
+            // 点击文件名
+            $scope.fileClick = function (item) {
+                if (item.isDir) {
+                    getFiles(item.relativePath);
+                    dealPath(item.relativePath);
+                } else {
+                    // 文件
+                }
+            };
 
             // 重命名
             $scope.renameFile = function (item, index) {
+
+                var inputModal = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'business/upload/views/inputModal.html',
+                    controller: 'inputModalCtrl',
+                    resolve: {
+                        formModel: function () {
+                            return {
+                                label: '文件名称',
+                                key: 'filename'
+                            };
+                        }
+                    }
+                });
+
+                inputModal.result.then(function (data) {
+                    $.ajax({
+                        url: '/renameFile',
+                        type: 'POST',
+                        data: {
+                            oldPath: item.relativePath,
+                            newName: data.filename
+                        },
+                        success: function (resp) {
+                            $scope.fileList[index].fileName = data.filename;
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                });
 
             };
 

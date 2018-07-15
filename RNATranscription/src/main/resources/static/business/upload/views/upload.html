@@ -3,6 +3,7 @@
 
 <div class="table_container">
     <button class="btn btn-primary upload_btn"><a ng-click="uploader()">上传文件</a></button>
+    <button class="btn btn-primary upload_btn"><a ng-click="newFolder()">新建文件夹</a></button>
 
     <div class="input-group">
         <input type="text" class="form-control" placeholder="请输入关键字（文件名、类型）搜索..."
@@ -14,18 +15,36 @@
 </div>
 
 <div class="table_container">
+
+    <ol class="breadcrumb">
+        <li ng-repeat="item in dirs track by $index">
+            <a ng-click="getFiles(item.path)">{{item.label}}</a>
+        </li>
+    </ol>
+
+</div>
+
+<div class="table_container" style="margin-top: -10px;">
     <table class="table table-striped table-hover">
         <thead>
         <th>文件名</th>
         <th>文件大小</th>
         <th>上传日期</th>
+        <th>文件类型</th>
         <th>操作</th>
         </thead>
         <tbody>
         <tr ng-repeat="item in fileList track by $index">
-            <td>{{item.fileName}}</td>
+            <td>
+                <i ng-if="item.isDir" class="fa fa-folder-open"></i>
+                <a ng-click="fileClick(item)">{{item.fileName}}</a>
+            </td>
             <td>{{item.size}}B</td>
             <td>{{item.uploadAt_f}}</td>
+            <td>{{item.isDir?"folder":"file"}}</td>
+            <td>
+                {{item.isDir?"folder":"file"}}
+            </td>
             <td>
                 <a class="blue" ng-click="renameFile(item, $index)">重命名</a>
                 <a class="blue" ng-click="moveFile(item, $index)">移动</a>
@@ -44,11 +63,15 @@
 
 <style>
     .input-group {
-        width: calc(100% - 90px);
+        width: calc(100% - 180px);
         float: right;
     }
 
     table tr td a {
         margin-right: 5px;
+    }
+
+    .fa-folder-open {
+        color: #999;
     }
 </style>
