@@ -30,7 +30,8 @@ public class RnaApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		System.out.println(fileService.getByUser("test").size());
+//		System.out.println(fileService.getByUser("test").size());
+		userService.addUser("admin","123");
 	}
 
 	@Test
