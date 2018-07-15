@@ -1,15 +1,13 @@
 package cn.edu.nju.njutcm.rna.service.serviceimpl;
 
-import cn.edu.nju.njutcm.rna.dao.FileDao;
-import cn.edu.nju.njutcm.rna.model.FileEntity;
 import cn.edu.nju.njutcm.rna.service.FileService;
 import cn.edu.nju.njutcm.rna.util.ApplicationUtil;
 import cn.edu.nju.njutcm.rna.util.FileUtil;
 import cn.edu.nju.njutcm.rna.vo.FileVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,35 +17,9 @@ import java.util.List;
 @Service
 public class FileServiceImpl implements FileService {
 
-    @Autowired
-    FileDao fileDao;
-
-    @Override
-    public Integer addFile(FileEntity fileEntity) {
-        FileEntity result = fileDao.saveAndFlush(fileEntity);
-        return result.getId();
-    }
-
-    @Override
-    public List<FileEntity> getByUser(String username) {
-        return fileDao.findAllByUserOrderByUploadAtDesc(username);
-    }
-
-    @Override
-    public String deleteFileById(Integer id) {
-        FileEntity fileEntity = fileDao.findOne(id);
-        String path = fileEntity.getSavepath();
-        if (FileUtil.delete(path)) {
-            fileDao.delete(fileEntity);
-            return "success";
-        } else {
-            return "fail";
-        }
-    }
-
     @Override
     public List<FileVO> getByUserAndPath(String username, String relativePath) {
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
+        String rootPath = getUserRootPath(username);
         String dirPath = rootPath + relativePath;
         if (!dirPath.endsWith(File.separator))
             dirPath = dirPath + File.separator;
@@ -62,9 +34,9 @@ public class FileServiceImpl implements FileService {
             FileVO fileVO = new FileVO();
             fileVO.setFileName(f.getName());
             fileVO.setDir(f.isDirectory());
-            fileVO.setRelativePath(relativePath + File.separator + f.getName());
             fileVO.setSize(f.length());
             fileVO.setLastModifiedTime(f.lastModified());
+            fileVO.setRelativePath(relativePath + File.separator + f.getName());
             fileList.add(fileVO);
         }
         return fileList;
@@ -72,7 +44,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String deleteFile(String username, String relativePath) {
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
+        String rootPath = getUserRootPath(username);
         String filePath = rootPath + relativePath;
         return FileUtil.delete(filePath) ? "success" : "fail";
     }
@@ -80,25 +52,25 @@ public class FileServiceImpl implements FileService {
     @Override
     public String changeFilePath(String username, String oldPath, String newPath) {
 
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
+        String rootPath = getUserRootPath(username);
         String oldFilePath = rootPath + oldPath;
         String newFilePath = rootPath + newPath;
-        if(!newFilePath.endsWith(File.separator)){
+        if (!newFilePath.endsWith(File.separator)) {
             newFilePath += File.separator;
         }
-        newFilePath += oldFilePath.substring(oldFilePath.lastIndexOf(File.separator)+1);
-        return rename(oldFilePath,newFilePath);
+        newFilePath += oldFilePath.substring(oldFilePath.lastIndexOf(File.separator) + 1);
+        return rename(oldFilePath, newFilePath);
     }
 
     @Override
     public String renameFile(String username, String oldPath, String newName) {
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator + "data"+ File.separator + username;
+        String rootPath = getUserRootPath(username);
         String oldFilePath = rootPath + oldPath;
-        String newFilePath = oldFilePath.substring(0,oldFilePath.lastIndexOf(File.separator)+1)+newName;
-        return rename(oldFilePath,newFilePath);
+        String newFilePath = oldFilePath.substring(0, oldFilePath.lastIndexOf(File.separator) + 1) + newName;
+        return rename(oldFilePath, newFilePath);
     }
 
-    private String rename(String oldName,String newName){
+    private String rename(String oldName, String newName) {
         String result;
         try {
             File afile = new File(oldName);
@@ -115,18 +87,90 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String creatDir(String username, String relativePath, String dirName) {
-        String rootPath = ApplicationUtil.getInstance().getRootPath() +
-                File.separator + "data"+ File.separator + username;
+        String rootPath = getUserRootPath(username);
         String parentPath = rootPath + relativePath;
-        if(!parentPath.endsWith(File.separator)){
-            parentPath +=File.separator;
+        if (!parentPath.endsWith(File.separator)) {
+            parentPath += File.separator;
         }
-        String dirPath=parentPath + dirName;
+        String dirPath = parentPath + dirName;
         File file = new File(dirPath);
         if (!file.exists()) {
             file.mkdirs();
             return "success";
         }
         return "dirExist";
+    }
+
+    @Override
+    public List<FileVO> searchFileByContains(String username, String relativePath, String keyWord) {
+        String rootPath = getUserRootPath(username);
+        int rootPathLength = rootPath.length();
+        File file = new File(rootPath + relativePath);
+        return searchFiles(file, keyWord.toLowerCase(), true, rootPathLength);
+    }
+
+    @Override
+    public List<FileVO> searchFileByEndwith(String username, String relativePath, String keyWord) {
+        String rootPath = getUserRootPath(username);
+        int rootPathLength = rootPath.length();
+        File file = new File(rootPath + relativePath);
+        return searchFiles(file, keyWord.toLowerCase(), false, rootPathLength);
+    }
+
+    private List<FileVO> searchFiles(File folder, final String keyword, final boolean isContains, final int rootPathLength) {
+        List<FileVO> result = new ArrayList<FileVO>();
+        if (folder.isFile()) {
+            if (folder.getName().toLowerCase().contains(keyword)) {
+                result.add(fileToFileVO(folder, rootPathLength));
+            }
+            return result;
+        }
+
+        File[] subFolders;
+        if (isContains) {
+            subFolders = folder.listFiles(file -> {
+                if (file.isDirectory() || file.getName().toLowerCase().contains(keyword)) {
+                    return true;
+                }
+                return false;
+            });
+        } else {
+
+            subFolders = folder.listFiles(file -> {
+                if (file.isDirectory() || file.getName().toLowerCase().endsWith(keyword)) {
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        if (subFolders != null) {
+            for (File file : subFolders) {
+                if (file.isFile()) {
+                    // 如果是文件则将文件添加到结果列表中
+                    result.add(fileToFileVO(file,rootPathLength));
+                } else {
+                    // 如果是文件夹，则递归调用本方法，然后把所有的文件加到结果列表中
+                    result.addAll(searchFiles(file, keyword,isContains,rootPathLength));
+                }
+            }
+        }
+        return result;
+    }
+
+    private FileVO fileToFileVO(final File f, final int rootPathLength) {
+        FileVO fileVO = new FileVO();
+        fileVO.setFileName(f.getName());
+        fileVO.setDir(f.isDirectory());
+        fileVO.setSize(f.length());
+        fileVO.setLastModifiedTime(f.lastModified());
+        fileVO.setRelativePath(f.getAbsolutePath().substring(rootPathLength));
+        return fileVO;
+    }
+
+    private String getUserRootPath(String username) {
+        String rootPath = ApplicationUtil.getInstance().getRootPath() +
+                File.separator + "data" + File.separator + username;
+        return rootPath;
     }
 }

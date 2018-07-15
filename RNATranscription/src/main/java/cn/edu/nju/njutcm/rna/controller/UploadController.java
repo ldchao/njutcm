@@ -1,19 +1,14 @@
 package cn.edu.nju.njutcm.rna.controller;
 
-import cn.edu.nju.njutcm.rna.model.FileEntity;
 import cn.edu.nju.njutcm.rna.service.FileService;
 import cn.edu.nju.njutcm.rna.util.FileUtil;
 import cn.edu.nju.njutcm.rna.vo.UploadVO;
-import cn.edu.nju.njutcm.rna.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by ldchao on 2018/5/7.
@@ -55,17 +50,17 @@ public class UploadController {
             } else {
                 destPath = FileUtil.saveFileNotInBlock(name,ext,file,request);
             }
-            if(destPath!=null){
-                FileEntity fileEntity=new FileEntity();
-                fileEntity.setFileName(name);
-                UserVO userVO = (UserVO) request.getSession().getAttribute("User");
-                fileEntity.setUser(userVO.getUsername());
-//                fileEntity.setUser("test");
-                fileEntity.setSize(Double.valueOf(size));
-                fileEntity.setSavepath(destPath);
-                fileEntity.setUploadAt(new Timestamp(System.currentTimeMillis()));
-                fileService.addFile(fileEntity);
-            }
+//            if(destPath!=null){
+//                FileEntity fileEntity=new FileEntity();
+//                fileEntity.setFileName(name);
+//                UserVO userVO = (UserVO) request.getSession().getAttribute("User");
+//                fileEntity.setUser(userVO.getUsername());
+////                fileEntity.setUser("test");
+//                fileEntity.setSize(Double.valueOf(size));
+//                fileEntity.setSavepath(request.getParameter("relativePath") );
+//                fileEntity.setUploadAt(new Timestamp(System.currentTimeMillis()));
+//                fileService.addFile(fileEntity);
+//            }
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -1,6 +1,5 @@
 package cn.edu.nju.njutcm.rna.service.serviceimpl;
 
-import cn.edu.nju.njutcm.rna.dao.FileDao;
 import cn.edu.nju.njutcm.rna.dao.TaskDao;
 import cn.edu.nju.njutcm.rna.model.TaskEntity;
 import cn.edu.nju.njutcm.rna.service.TaskService;
@@ -27,8 +26,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     TaskDao taskDao;
 
-    @Autowired
-    FileDao fileDao;
 
     @Override
     public String createTask(TaskEntity taskEntity) {
