@@ -7,9 +7,9 @@
 
     <div class="input-group">
         <input type="text" class="form-control" placeholder="请输入关键字（文件名、类型）搜索..."
-               ng-model="key" ng-change="search()">
+               ng-model="key" ng-keydown="keyDown()">
         <span class="input-group-btn">
-        <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+        <button class="btn btn-default" type="button" ng-click="search()"><i class="fa fa-search"></i></button>
       </span>
     </div>
 </div>
@@ -17,8 +17,8 @@
 <div class="table_container">
 
     <ol class="breadcrumb">
-        <li ng-repeat="item in dirs track by $index">
-            <a ng-click="getFiles(item.path)">{{item.label}}</a>
+        <li ng-repeat="item in dirs track by $index" ng-click="getFiles(item.path)">
+            <a>{{item.label}}</a>
         </li>
     </ol>
 
@@ -36,15 +36,12 @@
         <tbody>
         <tr ng-repeat="item in fileList track by $index">
             <td>
-                <i ng-if="item.isDir" class="fa fa-folder-open"></i>
+                <i ng-if="item.dir" class="fa fa-folder-open"></i>
                 <a ng-click="fileClick(item)">{{item.fileName}}</a>
             </td>
-            <td>{{item.size}}B</td>
+            <td>{{item.size?item.size:"-"}}B</td>
             <td>{{item.uploadAt_f}}</td>
-            <td>{{item.isDir?"folder":"file"}}</td>
-            <td>
-                {{item.isDir?"folder":"file"}}
-            </td>
+            <td>{{item.dir==true||item.dir=='true'?"folder":"file"}}</td>
             <td>
                 <a class="blue" ng-click="renameFile(item, $index)">重命名</a>
                 <a class="blue" ng-click="moveFile(item, $index)">移动</a>
@@ -52,7 +49,7 @@
             </td>
         </tr>
         <tr ng-show="fileList.length==0||!fileList">
-            <td colspan="4" class="no_data">
+            <td colspan="5" class="no_data">
                 <i class="fa fa-info-circle"></i>
                 暂无数据
             </td>

@@ -12,7 +12,7 @@ define([''], function () {
                 $scope.fileList = [{
                     fileName: '根目录',
                     relativePath: '',
-                    isDir: true,
+                    dir: true,
                     children: []
                 }];
             }
@@ -20,7 +20,7 @@ define([''], function () {
             $scope.selectedFile = "";
 
             $scope.getFiles = function (node) {
-                if (!node.isDir || (node.children && node.children.length != 0)) return;
+                if (!node.dir || (node.children && node.children.length != 0)) return;
 
                 // 获取文件
                 $.ajax({
@@ -41,7 +41,7 @@ define([''], function () {
 
             $scope.ok = function () {
 
-                if (!$scope.selectedFile || $scope.selectedFile.isDir) {
+                if (!$scope.selectedFile || $scope.selectedFile.dir) {
                     commonService.showMessage($scope, 'error', '请选择文件');
                     return;
                 }

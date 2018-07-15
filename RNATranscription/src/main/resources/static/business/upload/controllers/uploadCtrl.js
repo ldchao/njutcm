@@ -9,9 +9,13 @@ define([''], function () {
         function ($scope, commonService, $timeout, $uibModal) {
 
             var FILE_DATA = [];
-            $scope.fileList = [{fileName: 'test', isDir: true}];
 
-            function getFiles(path) {
+            $scope.fileList = [];
+
+            $scope.getFiles = function (path) {
+
+                if (!commonService.auth()) return;
+
                 $.ajax({
                     url: '/getFile?relativePath=' + path,
                     type: 'GET',
@@ -29,27 +33,29 @@ define([''], function () {
                         console.log(err)
                     }
                 });
+            };
+
+            if (commonService.auth()) {
+                $scope.getFiles("");
             }
 
             // 目录路径
-            $scope.dirs = [{label: '根目录', path: ''}];
+            $scope.dirs = [{label: '根目录', path: ""}];
 
             // 处理路径
             function dealPath(path) {
-                var pathArr = path.split("\\");
+
+                var pathArr = path.split("/");
+                pathArr.splice(0, 1); // 去除首个空串
                 var temp = [{label: '根目录', path: ''}];
                 pathArr.forEach(function (item, index) {
-                    var curTemp = pathArr.splice(0, index + 1);
+                    var curTemp = pathArr.slice(0, index + 1);
                     temp.push({
                         label: item,
-                        path: curTemp.join("\\")
+                        path: '/' + curTemp.join("/")
                     });
                 });
                 $scope.dirs = temp;
-            }
-
-            if (commonService.auth()) {
-                getFiles("");
             }
 
             // 新建文件夹
@@ -75,15 +81,40 @@ define([''], function () {
                 });
 
                 inputModal.result.then(function (data) {
+                    var curPath = $scope.dirs[$scope.dirs.length - 1].path;
 
+                    $.ajax({
+                        url: '/createDir',
+                        type: 'POST',
+                        data: {
+                            relativePath: curPath,
+                            dirName: data.folderName
+                        },
+                        success: function (resp) {
+                            if (resp == 'success') {
+                                $timeout(function () {
+                                    $scope.fileList.push({
+                                        fileName: data.folderName,
+                                        dir: true,
+                                        relativePath: curPath + "/" + data.folderName
+                                    });
+                                });
+                            } else {
+                                commonService.showMessage($scope, 'error', resp);
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err)
+                        }
+                    })
                 });
 
             };
 
             // 点击文件名
             $scope.fileClick = function (item) {
-                if (item.isDir) {
-                    getFiles(item.relativePath);
+                if (item.dir) {
+                    $scope.getFiles(item.relativePath);
                     dealPath(item.relativePath);
                 } else {
                     // 文件
@@ -134,11 +165,11 @@ define([''], function () {
 
             // 删除
             $scope.deleteFile = function (item, index) {
-                commonService.confirm('删除文件：' + item.fileName)
+                commonService.confirm('删除文件(夹)：' + item.fileName)
                     .result.then(function (resp) {
                     if (resp) {
                         $.ajax({
-                            url: '/deleteFileById?fileId=' + item.id,
+                            url: '/deleteFile?relativePath=' + item.relativePath,
                             type: 'DELETE',
                             success: function (resp) {
                                 if (resp == 'success') {
@@ -159,6 +190,13 @@ define([''], function () {
             };
 
             $scope.key = '';
+
+            $scope.keyDown = function () {
+                if (event.keyCode == 13) {
+                    $scope.search();
+                }
+            };
+
             $scope.search = function () {
                 $scope.fileList = FILE_DATA.filter(function (item) {
                     return (item.name.indexOf($scope.key) > -1 || item.type.indexOf($scope.key) > -1);

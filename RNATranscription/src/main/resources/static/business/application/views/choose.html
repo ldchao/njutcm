@@ -12,7 +12,7 @@
     <treecontrol class="tree-light" tree-model="fileList"
                  on-selection="getFiles(node)"
                  selected-node="selectedFile">
-         <span ng-switch="" on="node.isDir">
+         <span ng-switch="" on="node.dir">
              <span ng-switch-when="true" class="fa fa-folder-open" aria-hidden="true"></span>
              <span ng-switch-when="false" class="fa fa-file" aria-hidden="true"></span>
          </span> {{node.fileName}}

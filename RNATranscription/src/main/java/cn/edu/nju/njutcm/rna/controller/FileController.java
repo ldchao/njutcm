@@ -82,8 +82,8 @@ public class FileController {
      * @param request
      * @return dirExist或success，分别表示存在重名文件夹，成功
      */
-    @PostMapping(value = "/creatDir")
-    public String creatDir(String relativePath,String dirName ,HttpServletRequest request){
+    @PostMapping(value = "/createDir")
+    public String createDir(String relativePath,String dirName ,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.creatDir(userVO.getUsername(),relativePath,dirName);
     }
