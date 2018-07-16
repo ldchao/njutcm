@@ -24,9 +24,9 @@ define([''], function () {
          *  */
         var modelFactory = [
             [{key: 'treadNum', label: '线程数'},
-                {key: 'relativePath', type: 'file', label: '选择文件'},
+                {key: 'relativePath', type: 'file', label: '质检文件'},
                 {
-                    key: 'fileType', type: 'combox',
+                    key: 'fileType', label: '文件类型',type: 'combox',
                     options: [{value: 'fq', label: 'fq'}, {value: 'fq.gz', label: 'fq.gz'}]
                 }],  // 1-fastqc
             [{
