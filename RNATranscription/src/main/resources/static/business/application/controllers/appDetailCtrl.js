@@ -15,7 +15,6 @@ define([''], function () {
             $scope.taskModel = {
                 taskName: '',
                 type: 'all' // 默认填充
-                // fileId: ''
             };
 
             // 将表单模型填充到数据类型
@@ -59,13 +58,11 @@ define([''], function () {
                     return;
                 }
 
-                if (!data.fileId) {
-                    commonService.showMessage($scope, 'error', '请选择文件');
-                    return;
-                }
+                /** 非空判断 TODO */
 
+                var ajaxUrl = appService.getUrl(appId)
                 $.ajax({
-                    url: '/createTask',
+                    url: ajaxUrl,
                     type: 'POST',
                     data: data,
                     success: function (resp) {

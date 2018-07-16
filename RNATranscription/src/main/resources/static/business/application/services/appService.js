@@ -23,9 +23,24 @@ define([''], function () {
          *  option：{label，value}
          *  */
         var modelFactory = [
-            [{key: 'treadNum', label: '线程数'}, {key: 'fileId', type: 'file', label: '选择文件'}],  // 1-fastqc
-            [], // 2-TODO
-            [{key: 'fileId', type: 'file', label: '测序文件'}, {key: 'sampleNum', label: '样品数'},
+            [{key: 'treadNum', label: '线程数'},
+                {key: 'relativePath', type: 'file', label: '选择文件'},
+                {
+                    key: 'fileType', type: 'combox',
+                    options: [{value: 'fq', label: 'fq'}, {value: 'fq.gz', label: 'fq.gz'}]
+                }],  // 1-fastqc
+            [{
+                key: 'software', label: '软件选择', type: 'combox',
+                options: [{value: 'trimmomatic', label: 'trimmomatic'}, {value: 'NGSQC', label: 'NGSQC'}]
+            },
+                {
+                    key: 'seqType', label: '单/双端', type: 'combox',
+                    options: [{value: '单端', label: '单端'}, {value: '双端', label: '双端'}]
+                },
+                {key: 'relativePath', label: '过滤文件', type: 'file'},
+                {key: 'threadNum', label: '线程数'}
+            ], // 2-TODO
+            [{key: 'relativePath', type: 'file', label: '测序文件'}, {key: 'sampleNum', label: '样品数'},
                 {key: 'threadNum', label: '线程数'},
                 {key: 'gene', label: '基因组', type: 'combox', options: speciesOpt},
                 {key: 'untreated', label: 'untreated组名'},
@@ -40,8 +55,8 @@ define([''], function () {
             },
                 {key: 'threadNum', label: '线程数'},
                 {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
-                {key: 'left_fileId', label: '左端测序', type: 'file'},
-                {key: 'right_fileId', label: '右端测序', type: 'file'},
+                {key: 'relativePath1', label: '左端测序', type: 'file'},
+                {key: 'relativePath2', label: '右端测序', type: 'file'},
                 {key: 'fileName', label: '生成文件命名'}
             ], // 4-count
             [
@@ -57,13 +72,13 @@ define([''], function () {
                 {key: 'qValue', label: 'qValue设置'}
             ], // 6-edgeR
             [
-                {key: 'fileId', label: '基因文件', type: 'file'},
+                {key: 'relativePath', label: '基因文件', type: 'file'},
                 {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
                 {key: 'geneType', label: '基因类型'},
                 {key: 'qValue', label: 'qValue设置'}
             ], // 7-GO
             [
-                {key: 'fileId', label: '基因文件', type: 'file'},
+                {key: 'relativePath', label: '基因文件', type: 'file'},
                 {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
                 {key: 'geneType', label: '基因类型'},
                 {key: 'qValue', label: 'qValue设置'}
@@ -85,13 +100,9 @@ define([''], function () {
                         {label: 'column', value: 'column'},
                         {label: 'none', value: 'none'}]
                 },
-                {
-                    key: 'color', label: '颜色', type: 'combox',
-                    options: [
-                        {label: 'green', value: 'green'},
-                        {label: 'white', value: 'white'},
-                        {label: 'black', value: 'black'}]
-                },
+                {key: 'color1', label: '第一种颜色'},
+                {key: 'color2', label: '第二种颜色'},
+                {key: 'color3', label: '第三种颜色'},
                 {
                     key: 'isCluster', label: '样本是否聚类', type: 'combox',
                     options: [
@@ -105,27 +116,40 @@ define([''], function () {
                 {key: 'xWidth', label: 'X轴宽度'},
                 {key: 'yWidth', label: 'Y轴宽度'},
                 {key: 'padj', label: 'padj阈值设置'},
-                {
-                    key: 'color', label: '颜色', type: 'combox',
-                    options: [
-                        {label: 'green', value: 'green'},
-                        {label: 'white', value: 'white'},
-                        {label: 'black', value: 'black'}]
-                }
+                {key: 'color1', label: '第一种颜色'},
+                {key: 'color2', label: '第二种颜色'},
+                {key: 'color3', label: '第三种颜色'}
             ], // 12-Volcano
-            [], // 13-venn
             [
-                {key: 'fileId', label: '基因文件', type: 'file'},
+                {key: 'relativePath', label: '选择文件', type: 'file'}
+            ], // 13-venn
+            [
+                {key: 'relativePath', label: '基因文件', type: 'file'},
                 {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
                 {key: 'geneType', label: '基因类型'},
                 {key: 'ensembl', label: '目标转化类型'}
             ], // 14-IDconvert
-            []  // 15-pie
+            [
+                {key: 'relativePath', label: '选择文件', type: 'file'}
+            ], // 15-pie
+            [
+                {key: 'relativePath', label: '选择文件', type: 'file'},
+                {key: 'fileName', label: '文件名称'}
+            ]  // 16-matrix
         ];
 
         service.getModel = function (index) {
             return modelFactory[index];
         };
+
+        var urlFactory = ['/createFastQCTask', '/createTrimmomatic2Task', '/createCufflinksTask', '/createCountTask',
+            '/createDESeq2Task', '/createEdgeRTask', '/createGOTask', '/createKEGGTask',
+            '/createPCATask', '/create3DPCATask', '/createPheatmapTask', '/createVolcanoTask',
+            '/createVennTask', '/createIDconverttask', '/createPieTask', '/createMatrixTask'];
+
+        service.getUrl = function (index) {
+            return urlFactory[index];
+        }
 
     };
 

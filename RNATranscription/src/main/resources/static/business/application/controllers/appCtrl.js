@@ -10,8 +10,8 @@ define([''], function () {
         $scope.appList = [];
 
         function getApps() {
-            var name = ['1-fastqc', '2-应用', '3-cufflinks', '4-count', '5-DESeq2', '6-edgeR', '7-GO',
-                '8-KEGG', '9-PCA', '10-3DPCA', '11-pheatmap', '12-Volcano', '13-venn', '14-IDconvert', '15-pie'];
+            var name = ['1-fastQC', '2-filter', '3-cufflinks', '4-count', '5-DESeq2', '6-edgeR', '7-GO', '8-KEGG',
+                '9-PCA', '10-3DPCA', '11-pheatmap', '12-Volcano', '13-venn', '14-IDconvert', '15-pie', '16-matrix'];
 
             var temp = [];
             name.forEach(function (item, index) {
