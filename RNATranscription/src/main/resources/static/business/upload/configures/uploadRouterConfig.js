@@ -15,7 +15,9 @@ define(['lazy-load/lazyLoad'],
             scripts: {
                 controllers: [
                     'business/upload/controllers/uploadCtrl',
-                    'business/upload/controllers/inputModalCtrl'
+                    'business/upload/controllers/inputModalCtrl',
+                    'business/upload/controllers/refactorCtrl'
+
                 ]
             }
         }];

@@ -160,7 +160,37 @@ define([''], function () {
 
             // 移动
             $scope.moveFile = function (item, index) {
+                var oldPath = item.relativePath;
 
+                var refactorModal = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'business/application/views/choose.html',
+                    controller: 'refactorCtrl'
+                });
+
+                refactorModal.result.then(function (data) {
+                    console.log(data);
+
+                    $.ajax({
+                        url: '/changeFilePath',
+                        type: 'POST',
+                        data: {
+                            oldPath: oldPath,
+                            newPath: data
+                        },
+                        success: function (resp) {
+                            if (resp == 'success') {
+                                $scope.fileList.splice(index, 1);
+                            } else {
+                                commonService.showMessage($scope, 'error', resp);
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                });
             };
 
             // 删除
