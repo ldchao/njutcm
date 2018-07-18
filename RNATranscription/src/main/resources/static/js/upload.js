@@ -150,7 +150,7 @@ $(function () {
         console.info("input file= " + flie_count);
         // 将存在file对象中的md5数据携带发送过去。
         data.md5value = fileMd5;//md5
-        data.relativePath = curPath;
+        data.relativePath = escape(curPath);
         /** 重命名 */
         // data.fileName_ = $("#rename_" + file.id).val();
         // console.log("fileName_: " + data.fileName_);

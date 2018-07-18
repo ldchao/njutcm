@@ -154,14 +154,14 @@ public class TaskController {
      * @param sampleNum 每组样品数
      * @param threadNum 线程数
      * @param gene 基因组(mouse,human,rat三种)
-     * @param untreaded untreated组名
-     * @param treaded treated组名
+     * @param untreated untreated组名
+     * @param treated treated组名
      * @param newTranscript 是否选择构建新转录本【1否；2是】
      * @param request
      * @return
      */
     @PostMapping("/createCufflinksTask")
-    public String createTask(String taskName,String relativePath,int sampleNum,String threadNum,String gene,String untreaded,String treaded,String newTranscript,HttpServletRequest request){
+    public String createTask(String taskName,String relativePath,int sampleNum,String threadNum,String gene,String untreated,String treated,String newTranscript,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
             return "fail";
@@ -177,7 +177,7 @@ public class TaskController {
         String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
-        cmd += "sh /home/soft/cufflinks.sh "+inputFilePath+" "+sampleNum+" "+threadNum+" "+gene+" "+untreaded+" "+treaded+" "+newTranscript;
+        cmd += "sh /home/soft/cufflinks.sh "+inputFilePath+" "+sampleNum+" "+threadNum+" "+gene+" "+untreated+" "+treated+" "+newTranscript;
         resultDir += "cufflinks.zip";
         TaskEntity taskEntity=new TaskEntity();
         taskEntity.setUser(username);

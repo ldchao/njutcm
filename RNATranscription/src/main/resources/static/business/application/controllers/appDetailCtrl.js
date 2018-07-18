@@ -58,6 +58,13 @@ define([''], function () {
                     return;
                 }
 
+                // 复选框赋值
+                $scope.formModel.forEach(function (item) {
+                    if (item.type == 'combox') {
+                        data[item.key] = data[item.key].value;
+                    }
+                });
+
                 /** 非空判断 TODO */
 
                 var ajaxUrl = appService.getUrl(appId)

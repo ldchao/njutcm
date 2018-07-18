@@ -20,6 +20,10 @@ define([''], function () {
             $scope.selectedFile = "";
 
             $scope.getFiles = function (node) {
+
+                $scope.selectedFile = node;
+                $scope.selectedFile.decodePath = unescape(node.relativePath);
+
                 if (!node.dir || (node.children && node.children.length != 0)) return;
 
                 // 获取文件

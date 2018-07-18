@@ -21,7 +21,7 @@
 </div>
 
 <div class="modal-footer">
-    <span class="preview">已选择: <span>{{selectedFile.relativePath}}</span></span>
+    <span class="preview">已选择: <span ng-show="selectedFile.decodePath">{{selectedFile.decodePath}}</span></span>
     <button class="btn btn-primary" type="button" ng-click="ok()">选择</button>
     <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
 </div>

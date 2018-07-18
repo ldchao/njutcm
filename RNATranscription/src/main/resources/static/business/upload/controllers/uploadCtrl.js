@@ -17,11 +17,12 @@ define([''], function () {
                 if (!commonService.auth()) return;
 
                 $.ajax({
-                    url: '/getFile?relativePath=' + path,
+                    url: '/getFile?relativePath=' + escape(path),
                     type: 'GET',
                     success: function (resp) {
                         resp.forEach(function (item) {
                             item.uploadAt_f = new Date(item.lastModifiedTime).Format("yyyy-MM-dd hh:mm:ss");
+                            item.relativePath = unescape(item.relativePath);
                         });
                         FILE_DATA = resp;
                         $timeout(function () {
@@ -87,7 +88,7 @@ define([''], function () {
                         url: '/createDir',
                         type: 'POST',
                         data: {
-                            relativePath: curPath,
+                            relativePath: escape(curPath),
                             dirName: data.folderName
                         },
                         success: function (resp) {
@@ -144,7 +145,7 @@ define([''], function () {
                         url: '/renameFile',
                         type: 'POST',
                         data: {
-                            oldPath: item.relativePath,
+                            oldPath: escape(item.relativePath),
                             newName: data.filename
                         },
                         success: function (resp) {
@@ -176,8 +177,8 @@ define([''], function () {
                         url: '/changeFilePath',
                         type: 'POST',
                         data: {
-                            oldPath: oldPath,
-                            newPath: data
+                            oldPath: escape(oldPath),
+                            newPath: escape(data)
                         },
                         success: function (resp) {
                             if (resp == 'success') {
@@ -199,7 +200,7 @@ define([''], function () {
                     .result.then(function (resp) {
                     if (resp) {
                         $.ajax({
-                            url: '/deleteFile?relativePath=' + item.relativePath,
+                            url: '/deleteFile?relativePath=' + escape(item.relativePath),
                             type: 'DELETE',
                             success: function (resp) {
                                 if (resp == 'success') {
