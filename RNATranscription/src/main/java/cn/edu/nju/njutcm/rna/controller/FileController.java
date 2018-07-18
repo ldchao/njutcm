@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -31,6 +32,11 @@ public class FileController {
      */
     @GetMapping(value = "/getFile")
     public List<FileVO> getFileList(String relativePath,HttpServletRequest request){
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            relativePath = "";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.getByUserAndPath(userVO.getUsername(),relativePath);
     }
@@ -43,6 +49,11 @@ public class FileController {
      */
     @DeleteMapping(value = "/deleteFile")
     public String deleteFile(String relativePath,HttpServletRequest request){
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.deleteFile(userVO.getUsername(),relativePath);
     }
@@ -58,6 +69,12 @@ public class FileController {
      */
     @PostMapping(value = "/changeFilePath")
     public String changeFilePath(String oldPath,String newPath,HttpServletRequest request){
+        try {
+            oldPath = URLDecoder.decode(oldPath,"utf-8");
+            newPath = URLDecoder.decode(newPath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.changeFilePath(userVO.getUsername(),oldPath,newPath);
     }
@@ -71,6 +88,11 @@ public class FileController {
      */
     @PostMapping(value = "/renameFile")
     public String renameFile(String oldPath,String newName ,HttpServletRequest request){
+        try {
+            oldPath = URLDecoder.decode(oldPath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.renameFile(userVO.getUsername(),oldPath,newName);
     }
@@ -84,6 +106,11 @@ public class FileController {
      */
     @PostMapping(value = "/createDir")
     public String createDir(String relativePath,String dirName ,HttpServletRequest request){
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.creatDir(userVO.getUsername(),relativePath,dirName);
     }
@@ -97,6 +124,11 @@ public class FileController {
      */
     @GetMapping(value = "/searchFileByEndwith")
     public List<FileVO> searchFileByEndwith(String relativePath,String keyWord,HttpServletRequest request){
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            relativePath = "";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.searchFileByEndwith(userVO.getUsername(),relativePath,keyWord);
     }
@@ -110,6 +142,11 @@ public class FileController {
      */
     @GetMapping(value = "/searchFileByContains")
     public List<FileVO> searchFileByContains(String relativePath,String keyWord,HttpServletRequest request){
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            relativePath = "";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         return fileService.searchFileByContains(userVO.getUsername(),relativePath,keyWord);
     }

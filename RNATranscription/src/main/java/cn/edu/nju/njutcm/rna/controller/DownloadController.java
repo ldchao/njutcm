@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.UUID;
 
 /**
@@ -51,6 +53,11 @@ public class DownloadController {
 
     @RequestMapping("/downloadFile")
     public String downloadFile(String relativePath, HttpServletRequest request,HttpServletResponse response) {
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         String rootPath = ApplicationUtil.getInstance().getRootPath()+ File.separator + "data"+ File.separator + userVO.getUsername();
         String path = rootPath + relativePath;

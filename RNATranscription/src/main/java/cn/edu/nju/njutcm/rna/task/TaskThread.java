@@ -1,17 +1,12 @@
 package cn.edu.nju.njutcm.rna.task;
 
 import cn.edu.nju.njutcm.rna.dao.TaskDao;
-import cn.edu.nju.njutcm.rna.model.FileEntity;
 import cn.edu.nju.njutcm.rna.model.TaskEntity;
-import cn.edu.nju.njutcm.rna.util.ApplicationUtil;
-import cn.edu.nju.njutcm.rna.util.FileUtil;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**

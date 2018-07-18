@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -221,8 +223,15 @@ public class FileUtil {
 
     private static String getDestPath(HttpServletRequest request) {
 
+        String relativePath= null;
+        try {
+            relativePath = URLDecoder.decode(request.getParameter("relativePath"),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            relativePath = "";
+        }
         String destPath = ApplicationUtil.getInstance().getRootPath() + File.separator
-                + "data" + File.separator+ getUsername(request) + request.getParameter("relativePath") + File.separator ;// 文件路径
+                + "data" + File.separator+ getUsername(request) + relativePath + File.separator ;// 文件路径
         return destPath;
     }
 

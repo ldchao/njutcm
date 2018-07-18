@@ -7,7 +7,8 @@ import cn.edu.nju.njutcm.rna.vo.FileVO;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileFilter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class FileServiceImpl implements FileService {
         String dirPath = rootPath + relativePath;
         if (!dirPath.endsWith(File.separator))
             dirPath = dirPath + File.separator;
-        System.out.println(dirPath);
+//        System.out.println(dirPath);
         File dirFile = new File(dirPath);
         ArrayList<FileVO> fileList = new ArrayList<FileVO>();
         if (!dirFile.isDirectory()) {
@@ -36,7 +37,11 @@ public class FileServiceImpl implements FileService {
             fileVO.setDir(f.isDirectory());
             fileVO.setSize(f.length());
             fileVO.setLastModifiedTime(f.lastModified());
-            fileVO.setRelativePath(relativePath + File.separator + f.getName());
+            try {
+                fileVO.setRelativePath(URLEncoder.encode(relativePath + File.separator + f.getName(),"UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                fileVO.setRelativePath("");
+            }
             fileList.add(fileVO);
         }
         return fileList;
@@ -164,7 +169,11 @@ public class FileServiceImpl implements FileService {
         fileVO.setDir(f.isDirectory());
         fileVO.setSize(f.length());
         fileVO.setLastModifiedTime(f.lastModified());
-        fileVO.setRelativePath(f.getAbsolutePath().substring(rootPathLength));
+        try {
+            fileVO.setRelativePath(URLEncoder.encode(f.getAbsolutePath().substring(rootPathLength),"utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            fileVO.setRelativePath("");
+        }
         return fileVO;
     }
 

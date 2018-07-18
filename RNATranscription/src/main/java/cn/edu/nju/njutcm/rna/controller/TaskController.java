@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -64,6 +66,13 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        System.out.println(relativePath);
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
+        System.out.println(relativePath);
         String username=userVO.getUsername();
         String inputFilePath = getUserRootPath(username) + relativePath;
         String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
@@ -104,6 +113,11 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //测序文件
         String inputFilePath = getUserRootPath(username) + relativePath;
@@ -117,7 +131,7 @@ public class TaskController {
         taskEntity.setUser(username);
         taskEntity.setUser(userVO.getUsername());
         taskEntity.setTaskName(taskName);
-        taskEntity.setType("count");
+        taskEntity.setType("filter");
         taskEntity.setStartAt(new Timestamp(System.currentTimeMillis()));
         taskEntity.setTaskCode(cmd);
         taskEntity.setStatus("queuing");
@@ -150,6 +164,11 @@ public class TaskController {
     public String createTask(String taskName,String relativePath,int sampleNum,String threadNum,String gene,String untreaded,String treaded,String newTranscript,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
+            return "fail";
+        }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
             return "fail";
         }
         String username=userVO.getUsername();
@@ -197,6 +216,11 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            relativePath1 = URLDecoder.decode(relativePath1,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //测序文件
         String inputFilePath1 = getUserRootPath(username) + relativePath1;
@@ -208,6 +232,11 @@ public class TaskController {
         if(seqType.equals("1")){
             cmd +="sh /home/soft/count.sh 1 "+threadNum+" "+specie+" "+inputFilePath1+" "+fileName;
         }else{
+            try {
+                relativePath2 = URLDecoder.decode(relativePath2,"utf-8");
+            } catch (UnsupportedEncodingException e) {
+                return "fail";
+            }
             String inputFilePath2 = getUserRootPath(username) + relativePath2;
             cmd +="sh /home/soft/count.sh 2 "+threadNum+" "+specie+" "+inputFilePath1+" "+inputFilePath2+" "+fileName;
         }
@@ -243,6 +272,12 @@ public class TaskController {
     public String createDESeq2Task(String taskName,String matrix,String conditionFile,String specie,String qValue,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
+            return "fail";
+        }
+        try {
+            matrix = URLDecoder.decode(matrix,"utf-8");
+            conditionFile = URLDecoder.decode(conditionFile,"utf-8");
+        } catch (UnsupportedEncodingException e) {
             return "fail";
         }
         String username=userVO.getUsername();
@@ -290,6 +325,12 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            matrix = URLDecoder.decode(matrix,"utf-8");
+            conditionFile = URLDecoder.decode(conditionFile,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //表达矩阵
         String matrixPath = getUserRootPath(username) + matrix;
@@ -335,6 +376,11 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //gene文件
         String genePath = getUserRootPath(username) + relativePath;
@@ -378,6 +424,11 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //gene文件
         String genePath = getUserRootPath(username) + relativePath;
@@ -415,6 +466,12 @@ public class TaskController {
     public String createPCATask(String taskName,String matrix,String conditionFile,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
+            return "fail";
+        }
+        try {
+            matrix = URLDecoder.decode(matrix,"utf-8");
+            conditionFile = URLDecoder.decode(conditionFile,"utf-8");
+        } catch (UnsupportedEncodingException e) {
             return "fail";
         }
         String username=userVO.getUsername();
@@ -455,6 +512,12 @@ public class TaskController {
     public String create3DPCATask(String taskName,String matrix,String conditionFile,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
+            return "fail";
+        }
+        try {
+            matrix = URLDecoder.decode(matrix,"utf-8");
+            conditionFile = URLDecoder.decode(conditionFile,"utf-8");
+        } catch (UnsupportedEncodingException e) {
             return "fail";
         }
         String username=userVO.getUsername();
@@ -505,6 +568,11 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            matrix = URLDecoder.decode(matrix,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //表达矩阵
         String matrixPath = getUserRootPath(username) + matrix;
@@ -553,6 +621,11 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            heatMap = URLDecoder.decode(heatMap,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //热图矩阵
         String heatMapPath = getUserRootPath(username) + heatMap;
@@ -587,6 +660,11 @@ public class TaskController {
     public String createVennTask(String taskName,String relativePath,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
+            return "fail";
+        }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
             return "fail";
         }
         String username=userVO.getUsername();
@@ -630,6 +708,11 @@ public class TaskController {
         if(userVO==null){
             return "fail";
         }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            return "fail";
+        }
         String username=userVO.getUsername();
         //基因文件
         String inputFilePath = getUserRootPath(username) + relativePath;
@@ -664,6 +747,11 @@ public class TaskController {
     public String createPieTask(String taskName,String relativePath,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
+            return "fail";
+        }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
             return "fail";
         }
         String username=userVO.getUsername();
@@ -701,6 +789,11 @@ public class TaskController {
     public String createMatrixTask(String taskName,String relativePath,String fileName,HttpServletRequest request){
         UserVO userVO = (UserVO) request.getSession().getAttribute("User");
         if(userVO==null){
+            return "fail";
+        }
+        try {
+            relativePath = URLDecoder.decode(relativePath,"utf-8");
+        } catch (UnsupportedEncodingException e) {
             return "fail";
         }
         String username=userVO.getUsername();
