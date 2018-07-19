@@ -22,6 +22,7 @@ define([''], function () {
                     success: function (resp) {
                         resp.forEach(function (item) {
                             item.uploadAt_f = new Date(item.lastModifiedTime).Format("yyyy-MM-dd hh:mm:ss");
+                            item.initPath = item.relativePath;
                             item.relativePath = decodeURIComponent(item.relativePath);
                         });
                         FILE_DATA = resp;
