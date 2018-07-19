@@ -47,7 +47,7 @@
                 <a class="blue" ng-click="renameFile(item, $index)">重命名</a>
                 <a class="blue" ng-click="moveFile(item, $index)">移动</a>
                 <a class="blue"
-                   ng-href='{{"/downloadFile/?relativePath="+item.initPath}}' ng-if="!item.dir">下载</a>
+                   ng-href='{{"/downloadFile/?relativePath="+item.initPath}}'>下载</a>
                 <a class="red" ng-click="deleteFile(item, $index)">删除</a>
             </td>
         </tr>
