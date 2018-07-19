@@ -22,7 +22,7 @@ define([''], function () {
             $scope.getFiles = function (node) {
 
                 $scope.selectedFile = node;
-                $scope.selectedFile.decodePath = unescape(node.relativePath);
+                $scope.selectedFile.decodePath = decodeURIComponent(node.relativePath);
 
                 if (!node.dir || (node.children && node.children.length != 0)) return;
 

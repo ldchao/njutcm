@@ -67,7 +67,7 @@ define([''], function () {
 
                 /** 非空判断 TODO */
 
-                var ajaxUrl = appService.getUrl(appId)
+                var ajaxUrl = appService.getUrl(appId);
                 $.ajax({
                     url: ajaxUrl,
                     type: 'POST',
