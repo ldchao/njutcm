@@ -307,8 +307,8 @@ public class TaskController {
     /**
      * 6-edgeR
      * ##命令行：Rscript edgeR.R edrmerged.txt edrcondition.txt 2 0.5
-     * ##desmerged.txt：表达矩阵
-     * ##descondition.txt：条件文件
+     * ##edrmerged.txt：表达矩阵
+     * ##edrcondition.txt：条件文件
      * ##2：物种选择（1：人类，2：小鼠，3：大鼠）
      * ##0.5：qvalue设置
      * @param taskName 任务名
@@ -597,7 +597,7 @@ public class TaskController {
     /**
      * 12-Volcano
      * ##命令行：Rscript Volcano.R Volcano.txt 0.5 10 15 0.05 blue green red
-     * ##DES.txt：热图矩阵
+     * ##Volcano.txt：热图矩阵
      * ##0.5:散点大小
      * ##10：X轴宽度
      * ##15：Y轴宽度

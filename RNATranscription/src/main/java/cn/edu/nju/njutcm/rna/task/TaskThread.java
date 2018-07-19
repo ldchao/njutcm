@@ -4,10 +4,12 @@ import cn.edu.nju.njutcm.rna.dao.TaskDao;
 import cn.edu.nju.njutcm.rna.model.TaskEntity;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ldchao on 2018/5/13.
@@ -31,30 +33,37 @@ public class TaskThread implements Runnable {
         taskEntity.setStatus("executing");
         taskDao.saveAndFlush(taskEntity);
 
-        //执行命令
-        try {
-            String cmd =taskEntity.getTaskCode();
-            Process ps = Runtime.getRuntime().exec(cmd);
-            Boolean result = ps.waitFor(10, TimeUnit.DAYS);
-            if (result) {
-                taskEntity.setStatus("success");
-                taskEntity.setEndAt(new Timestamp(System.currentTimeMillis()));
-            } else {
-                taskEntity.setStatus("overtime");
-            }
-            BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
-            StringBuffer sb = new StringBuffer();
-            String line;
 
-            while ((line = br.readLine()) != null) {
+        //执行命令
+        String cmd =taskEntity.getTaskCode();
+        Runtime run = Runtime.getRuntime();
+        try {
+            Process proc = run.exec("/bin/bash", null, null);
+            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(proc.getOutputStream())), true);
+//            for (String line : commands) {
+//                out.println(line);
+//            }
+             out.println(cmd);
+            out.println("exit");// 这个命令必须执行，否则in流不结束。
+            StringBuffer sb = new StringBuffer();
+            String line ;
+            while ((line = in.readLine()) != null) {
                 sb.append(line).append("\n");
             }
+            System.out.println("*********任务"+taskEntity.getTaskName() +"*************");
             System.out.println(sb.toString());
-        } catch (IOException e) {
-            taskEntity.setStatus("fail");
-        } catch (InterruptedException e) {
+            System.out.println("*****************************************");
+            proc.waitFor();
+            in.close();
+            out.close();
+            proc.destroy();
+            taskEntity.setStatus("success");
+            taskEntity.setEndAt(new Timestamp(System.currentTimeMillis()));
+        } catch (IOException | InterruptedException e1) {
             taskEntity.setStatus("fail");
         }
+
         taskDao.saveAndFlush(taskEntity);
         System.out.println("线程结束");
     }

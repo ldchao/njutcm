@@ -60,7 +60,11 @@ define([''], function () {
                 options: [{label: '双端测序', value: '2'}, {label: '单端测序', value: '1'}]
             },
                 {key: 'threadNum', label: '线程数'},
-                {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
+                {key: 'specie', label: '物种选择', type: 'combox', options: [
+                    {value: 'human', label: '人类'},
+                    {value: 'mouse', label: '小鼠'},
+                    {value: 'rat', label: '大鼠'}
+                ]},
                 {key: 'relativePath1', label: '左端测序', type: 'file'},
                 {key: 'relativePath2', label: '右端测序', type: 'file'},
                 {key: 'fileName', label: '生成文件命名'}
