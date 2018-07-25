@@ -33,11 +33,11 @@ define([''], function () {
                     success: function (resp) {
 
                         // 去除文件
-                        resp.forEach(function (item, index) {
-                            if (!item.dir) {
-                                resp.splice(index, 1);
+                        for (var i = resp.length - 1; i >= 0; i--) {
+                            if (!resp[i].dir) {
+                                resp.splice(i, 1);
                             }
-                        });
+                        }
 
                         $timeout(function () {
                             node.children = resp;
