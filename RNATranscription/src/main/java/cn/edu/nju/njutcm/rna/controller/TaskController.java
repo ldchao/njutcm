@@ -75,7 +75,8 @@ public class TaskController {
         System.out.println(relativePath);
         String username=userVO.getUsername();
         String inputFilePath = getUserRootPath(username) + relativePath;
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "sh /home/soft/fastqc.sh "+inputFilePath+" "+fileType+" "+threadNum;
@@ -122,7 +123,8 @@ public class TaskController {
         //测序文件
         String inputFilePath = getUserRootPath(username) + relativePath;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd+="sh /home/soft/filter.sh "+software+" "+seqType+" "+threadNum+" "+inputFilePath;
@@ -174,7 +176,8 @@ public class TaskController {
         String username=userVO.getUsername();
         //测序文件
         String inputFilePath = getUserRootPath(username) + relativePath;
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "sh /home/soft/cufflinks.sh "+inputFilePath+" "+sampleNum+" "+threadNum+" "+gene+" "+untreated+" "+treated+" "+newTranscript;
@@ -225,7 +228,8 @@ public class TaskController {
         //测序文件
         String inputFilePath1 = getUserRootPath(username) + relativePath1;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath1);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
 
@@ -286,7 +290,8 @@ public class TaskController {
         //条件文件
         String conditionFilePath = getUserRootPath(username) + conditionFile;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(matrixPath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/DESeq2.R "+matrixPath+" "+
@@ -337,7 +342,8 @@ public class TaskController {
         //条件文件
         String conditionFilePath = getUserRootPath(username) + conditionFile;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(matrixPath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/edgeR.R "+matrixPath+" "+
@@ -385,7 +391,8 @@ public class TaskController {
         //gene文件
         String genePath = getUserRootPath(username) + relativePath;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(genePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/GO.R "+genePath+" "+
@@ -433,7 +440,8 @@ public class TaskController {
         //gene文件
         String genePath = getUserRootPath(username) + relativePath;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(genePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/KEGG.R "+genePath+" "+
@@ -480,7 +488,8 @@ public class TaskController {
         //条件文件
         String conditionFilePath = getUserRootPath(username) + conditionFile;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(matrixPath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/PCA.R "+matrixPath+" "+conditionFilePath;
@@ -526,7 +535,8 @@ public class TaskController {
         //条件文件
         String conditionFilePath = getUserRootPath(username) + conditionFile;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(matrixPath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/3DPCA.R "+matrixPath+" "+conditionFilePath;
@@ -577,7 +587,8 @@ public class TaskController {
         //表达矩阵
         String matrixPath = getUserRootPath(username) + matrix;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(matrixPath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/pheatmap.R "+matrixPath+" "+standard+" "+color1+" "+color2+" "+color3+" "+isCluster;
@@ -630,7 +641,8 @@ public class TaskController {
         //热图矩阵
         String heatMapPath = getUserRootPath(username) + heatMap;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(heatMapPath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/Volcano.R "+heatMapPath+" "+scatterSize+" "+xWidth+" "+yWidth+" "+padj+" "+color1+" "+color2+" "+color3;
@@ -670,7 +682,8 @@ public class TaskController {
         String username=userVO.getUsername();
         String inputFilePath = getUserRootPath(username) + relativePath;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/venn.R "+inputFilePath;
@@ -717,7 +730,8 @@ public class TaskController {
         //基因文件
         String inputFilePath = getUserRootPath(username) + relativePath;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/IDconvert.R "+inputFilePath+" "+specie+" "+geneType+" "+ensembl;
@@ -757,7 +771,8 @@ public class TaskController {
         String username=userVO.getUsername();
         String inputFilePath = getUserRootPath(username) + relativePath;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "Rscript /home/soft/pie.R "+inputFilePath;
@@ -799,7 +814,8 @@ public class TaskController {
         String username=userVO.getUsername();
         String inputFilePath = getUserRootPath(username) + relativePath;
 
-        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+//        String resultDir = getUserResultRootPath(username) + File.separator + taskName + File.separator;
+        String resultDir = getUserResultRootPath(inputFilePath);
         FileUtil.makeSureDirExist(resultDir);
         String cmd = "cd "+resultDir+";";
         cmd += "sh /home/soft/matrix.sh "+inputFilePath + " " +fileName;
@@ -821,9 +837,13 @@ public class TaskController {
         return rootPath + File.separator + username;
     }
 
-    private String getUserResultRootPath(String username){
-        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator+ "data" ;
-        return rootPath + File.separator + username + File.separator+ "result";
+//    private String getUserResultRootPath(String username){
+//        String rootPath = ApplicationUtil.getInstance().getRootPath() + File.separator+ "data" ;
+//        return rootPath + File.separator + username + File.separator+ "result";
+//    }
+
+    private String getUserResultRootPath(String inputFilePath) {
+        return inputFilePath.substring(0, inputFilePath.lastIndexOf(File.separator)+1);
     }
 
 }

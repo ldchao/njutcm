@@ -44,6 +44,7 @@ public class ZipUtil {
                     File[] sourceFiles = sourceFile.listFiles();
                     if (null == sourceFiles || sourceFiles.length < 1) {
                         System.out.println("待压缩的文件目录：" + sourceFilePath + "里面不存在文件，无需压缩.");
+                        zipFile.createNewFile();
                     } else {
                         fos = new FileOutputStream(zipFile);
                         zos = new ZipOutputStream(new BufferedOutputStream(fos));

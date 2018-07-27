@@ -41,7 +41,6 @@ public class DownloadController {
         String result;
         if(file.isDirectory()){
             String path=taskService.zipResult(taskEntity.getResultFile(),taskEntity.getTaskName()); //打包结果文件
-
             result = downloadUtil(response,path);
             taskService.deleteZipResult(path); //将打包的结果文件删除掉
         }else{
