@@ -53,12 +53,16 @@
             <uib-tabset active="active" type="tabs">
                 <!-- 说明 -->
                 <uib-tab index="0" heading="说明">
-                    暂无说明
+                    <div class="app_detail_example">
+                        <img ng-src="{{appDesc}}">
+                    </div>
                 </uib-tab>
 
                 <!-- 例子 -->
                 <uib-tab index="1" heading="例子">
-                    暂无例子
+                    <div class="app_detail_example">
+                        暂无例子
+                    </div>
                 </uib-tab>
             </uib-tabset>
         </div>
@@ -79,6 +83,8 @@
         min-height: 500px;
         background-color: #fff;
         margin-bottom: 20px;
+        position: relative;
+        border-radius: 4px;
     }
 
     .task_config_container {
@@ -116,6 +122,16 @@
 
     .form_line label {
         width: 100px;
+    }
+
+    .app_detail_example {
+        width: 100%;
+        height: 450px;
+        overflow: auto;
+    }
+
+    .app_detail_example img {
+        width: 100%;
     }
 
 </style>

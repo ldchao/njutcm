@@ -11,6 +11,8 @@ define([''], function () {
             var appId = $state.params.id;
             $scope.formModel = appService.getModel(appId);  // 表单模型
 
+            $scope.appDesc = "/theme/img/app-desc/app-desc-" + appId + ".png";
+
             // 数据类型
             $scope.taskModel = {
                 taskName: '',

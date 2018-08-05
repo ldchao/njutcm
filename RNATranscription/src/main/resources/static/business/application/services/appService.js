@@ -9,12 +9,6 @@ define([''], function () {
 
         var service = this;
 
-        var speciesOpt = [
-            {value: '1', label: '人类'},
-            {value: '2', label: '小鼠'},
-            {value: '3', label: '大鼠'}
-        ];
-
         /** taskName必填: 任务名
          *  若无type字段，则为输入框
          *  type=file，选择文件
@@ -23,16 +17,21 @@ define([''], function () {
          *  option：{label，value}
          *  */
         var modelFactory = [
-            [{key: 'threadNum', label: '线程数'},
+            [
+                {key: 'threadNum', label: '线程数'},
                 {key: 'relativePath', type: 'file', label: '质检文件'},
                 {
-                    key: 'fileType', label: '文件类型', type: 'combox',
+                    key: 'fileType',
+                    label: '文件类型',
+                    type: 'combox',
                     options: [{value: '1', label: 'fq'}, {value: '2', label: 'fq.gz'}]
-                }],  // 1-fastqc
-            [{
-                key: 'software', label: '软件选择', type: 'combox',
-                options: [{value: '1', label: 'trimmomatic'}, {value: '2', label: 'NGSQC'}]
-            },
+                }
+            ],  // 1-fastqc
+            [
+                {
+                    key: 'software', label: '软件选择', type: 'combox',
+                    options: [{value: '1', label: 'trimmomatic'}, {value: '2', label: 'NGSQC'}]
+                },
                 {
                     key: 'seqType', label: '单/双端', type: 'combox',
                     options: [{value: '1', label: '单端'}, {value: '2', label: '双端'}]
@@ -40,31 +39,18 @@ define([''], function () {
                 {key: 'relativePath', label: '过滤文件', type: 'file'},
                 {key: 'threadNum', label: '线程数'}
             ], // 2-TODO
-            [{key: 'relativePath', type: 'file', label: '测序文件'}, {key: 'sampleNum', label: '样品数'},
+            [
+                {key: 'relativePath', type: 'file', label: '测序文件'}, {key: 'sampleNum', label: '样品数'},
                 {key: 'threadNum', label: '线程数'},
-                {
-                    key: 'gene', label: '基因组', type: 'combox', options: [
-                    {value: 'human', label: '人类'},
-                    {value: 'mouse', label: '小鼠'},
-                    {value: 'rat', label: '大鼠'}
-                ]
-                },
+                {key: 'gene', label: '基因组'},
                 {key: 'untreated', label: 'untreated组名'},
                 {key: 'treated', label: 'treated组名'},
-                {
-                    key: 'newTranscript', label: '是否选择构建新转录本', type: 'combox',
-                    options: [{label: '是', value: 2}, {label: '否', value: 1}]
-                }], // 3-cufflinks
-            [{
-                key: 'seqType', label: '测序方式', type: 'combox',
-                options: [{label: '双端测序', value: '2'}, {label: '单端测序', value: '1'}]
-            },
+                {key: 'newTranscript', label: '是否选择构建新转录本'}
+            ], // 3-cufflinks
+            [
+                {key: 'seqType', label: '测序方式'},
                 {key: 'threadNum', label: '线程数'},
-                {key: 'specie', label: '物种选择', type: 'combox', options: [
-                    {value: 'human', label: '人类'},
-                    {value: 'mouse', label: '小鼠'},
-                    {value: 'rat', label: '大鼠'}
-                ]},
+                {key: 'specie', label: '物种选择'},
                 {key: 'relativePath1', label: '左端测序', type: 'file'},
                 {key: 'relativePath2', label: '右端测序', type: 'file'},
                 {key: 'fileName', label: '生成文件命名'}
@@ -72,24 +58,24 @@ define([''], function () {
             [
                 {key: 'matrix', label: '表达矩阵', type: 'file'},
                 {key: 'conditionFile', label: '条件文件', type: 'file'},
-                {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
+                {key: 'specie', label: '物种选择'},
                 {key: 'qValue', label: 'qValue设置'}
             ], // 5-DESeq2
             [
                 {key: 'matrix', label: '表达矩阵', type: 'file'},
                 {key: 'conditionFile', label: '条件文件', type: 'file'},
-                {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
+                {key: 'specie', label: '物种选择'},
                 {key: 'qValue', label: 'qValue设置'}
             ], // 6-edgeR
             [
                 {key: 'relativePath', label: '基因文件', type: 'file'},
-                {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
+                {key: 'specie', label: '物种选择'},
                 {key: 'geneType', label: '基因类型'},
                 {key: 'qValue', label: 'qValue设置'}
             ], // 7-GO
             [
                 {key: 'relativePath', label: '基因文件', type: 'file'},
-                {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
+                {key: 'specie', label: '物种选择'},
                 {key: 'geneType', label: '基因类型'},
                 {key: 'qValue', label: 'qValue设置'}
             ], // 8-KEGG
@@ -135,7 +121,7 @@ define([''], function () {
             ], // 13-venn
             [
                 {key: 'relativePath', label: '基因文件', type: 'file'},
-                {key: 'specie', label: '物种选择', type: 'combox', options: speciesOpt},
+                {key: 'specie', label: '物种选择'},
                 {key: 'geneType', label: '基因类型'},
                 {key: 'ensembl', label: '目标转化类型'}
             ], // 14-IDconvert
@@ -159,7 +145,7 @@ define([''], function () {
 
         service.getUrl = function (index) {
             return urlFactory[index];
-        }
+        };
 
     };
 

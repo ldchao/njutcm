@@ -4,9 +4,9 @@
 
     <div class="app_each_app" ng-repeat="item in appList track by $index">
         <div class="app_each_title">
-            <img ng-src="{{'/theme/img/'+item.icon}}">
+            <img ng-src="{{'/theme/img/app-icon/'+item.icon}}">
             <label ng-click="getDetail(item)"><a>{{item.name}}</a></label>
-            <span class="label label-info">{{item.type}}</span>
+            <!--<span class="label label-info">{{item.type}}</span>-->
         </div>
         <div class="app_each_info">
             [简介] {{item.brief}}
