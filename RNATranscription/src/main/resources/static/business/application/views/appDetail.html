@@ -60,8 +60,8 @@
 
                 <!-- 例子 -->
                 <uib-tab index="1" heading="例子">
-                    <div class="app_detail_example">
-                        暂无例子
+                    <div class="app_detail_example download_sample">
+                        <a ng-href='{{"/downloadExample/?id="+sampleId}}'><i class="fa fa-download"></i>下载示例</a>
                     </div>
                 </uib-tab>
             </uib-tabset>
@@ -132,6 +132,10 @@
 
     .app_detail_example img {
         width: 100%;
+    }
+
+    .download_sample {
+        margin: 10px 10px;
     }
 
 </style>

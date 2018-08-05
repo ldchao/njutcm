@@ -12,6 +12,7 @@ define([''], function () {
             $scope.formModel = appService.getModel(appId);  // 表单模型
 
             $scope.appDesc = "/theme/img/app-desc/app-desc-" + appId + ".png";
+            $scope.sampleId = Number(appId) + 1;
 
             // 数据类型
             $scope.taskModel = {
@@ -96,7 +97,7 @@ define([''], function () {
                 }
 
                 window.open('/uploader');
-            }
+            };
         }];
 
     var appModule = angular.module('application.config');
