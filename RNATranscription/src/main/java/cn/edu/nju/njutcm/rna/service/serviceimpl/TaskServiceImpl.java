@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * Created by ldchao on 2018/5/12.
@@ -29,12 +30,25 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public String createTask(TaskEntity taskEntity) {
+        if(isTaskNameExist(taskEntity.getUser(),taskEntity.getTaskName())){
+            return "Task name has existed.";
+        }
         TaskEntity result=taskDao.saveAndFlush(taskEntity);
         return startTask(result);
     }
 
     @Override
-    public boolean isTaskNameExist(String username, String taskName) {
+    public String deleteTaskById(Integer id) {
+        if(taskDao.exists(id)){
+            TaskEntity taskEntity = taskDao.findOne(id);
+            // TODO: 2018/8/5 从线程池中删除 
+            taskDao.delete(id);
+            return "success";
+        }
+        return "fail";
+    }
+
+    private boolean isTaskNameExist(String username, String taskName) {
         return taskDao.countByUserEqualsAndTaskNameEquals(username,taskName) ==0 ? false:true;
     }
 
@@ -71,7 +85,7 @@ public class TaskServiceImpl implements TaskService {
 
         TaskThread transcriptionTask=new TaskThread(taskEntity.getId(),taskDao);
         ExecutorService executorService= ThreadPoolFactory.getExecutorService();
-        executorService.execute(transcriptionTask);
+        Future future = executorService.submit(transcriptionTask);
         return "success";
     }
 
@@ -87,6 +101,5 @@ public class TaskServiceImpl implements TaskService {
     public void deleteZipResult(String filePath) {
         ZipUtil.deleteZipFile(filePath);
     }
-
 
 }

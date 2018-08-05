@@ -6,7 +6,6 @@ import cn.edu.nju.njutcm.rna.util.ApplicationUtil;
 import cn.edu.nju.njutcm.rna.util.FileUtil;
 import cn.edu.nju.njutcm.rna.vo.TaskVO;
 import cn.edu.nju.njutcm.rna.vo.UserVO;
-import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +37,12 @@ public class TaskController {
     @GetMapping("/reStartTaskById")
     public String reStartTaskById(Integer id){
         return taskService.reStartTaskById(id);
+    }
+
+    //根据id删除任务
+    @GetMapping("/deleteTaskById")
+    public String deleteTaskById(Integer id){
+        return taskService.deleteTaskById(id);
     }
 
     //获取所有任务列表

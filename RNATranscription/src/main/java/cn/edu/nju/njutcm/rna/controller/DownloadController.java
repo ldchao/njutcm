@@ -76,6 +76,21 @@ public class DownloadController {
         return result;
     }
 
+    @RequestMapping("/downloadExample")
+    public String downloadExample(HttpServletResponse response,Integer appNum) {
+
+        String exampleRootPath = "/home/sample/";
+        String[] examplePaths={"QC.zip","filter.zip",
+                "cufflinks.zip","count.zip",
+                "DESeq2.zip","edgeR.zip",
+                "GO.zip","KEGG.zip",
+                "PCA.zip","3DPCA.zip",
+                "pheatmap.zip","Volcano.zip",
+                "venn.zip","IDconvert.zip",
+                "pie.zip","matrix.zip"};
+        return downloadUtil(response,exampleRootPath+examplePaths[appNum-1]);
+    }
+
     private String downloadUtil(HttpServletResponse response,String path) {
 
         InputStream fis = null;

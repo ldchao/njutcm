@@ -13,7 +13,8 @@ public interface TaskService {
     //创建任务并运行
     public String createTask(TaskEntity taskEntity);
 
-    public boolean isTaskNameExist(String username,String taskName);
+    //根据id删除任务
+    public String deleteTaskById(Integer id);
 
     //根据id查询任务状态
     public String getStatusById(Integer id);

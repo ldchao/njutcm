@@ -47,18 +47,18 @@ define([''], function () {
             // 处理路径
             function dealPath(path) {
 
-                // 获取操作系统
-                var version = navigator.userAgent.toLowerCase();
+                // // 获取操作系统
+                // var version = navigator.userAgent.toLowerCase();
+                //
+                // var pathArr;
+                // if (version.indexOf("windows") > -1) {
+                //     // windows
+                //     pathArr = path.split("\\");
+                // } else {
+                //     pathArr = path.split("/");
+                // }
 
-                var pathArr;
-                if (version.indexOf("windows") > -1) {
-                    // windows
-                    pathArr = path.split("\\");
-                } else {
-                    pathArr = path.split("/");
-                }
-
-                // var pathArr = path.indexOf("/") > -1 ? path.split("/") : path.split("\\");
+                var pathArr = path.indexOf("/") > -1 ? path.split("/") : path.split("\\");
 
                 pathArr.splice(0, 1); // 去除首个空串
                 var temp = [{label: 'root', path: ''}];
