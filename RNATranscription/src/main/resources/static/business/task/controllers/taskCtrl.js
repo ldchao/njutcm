@@ -69,7 +69,32 @@ define([''], function () {
                 }
 
                 $scope.getTasks();
-            }
+            };
+
+            $scope.deleteTask = function (task) {
+                commonService.confirm('删除任务：' + task.taskName)
+                    .result.then(function (resp) {
+                    if (resp) {
+                        $.ajax({
+                            url: '/deleteTaskById?id=' + task.id,
+                            type: 'GET',
+                            success: function (resp) {
+                                console.log(resp)
+                                if (resp == 'success') {
+                                    $timeout(function () {
+                                        $scope.taskList.splice(index, 1);
+                                    });
+                                } else {
+                                    commonService.showMessage($scope, 'error', resp);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+            };
         }
 
     ];
