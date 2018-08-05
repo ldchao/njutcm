@@ -158,7 +158,7 @@ define([''], function () {
                         url: '/renameFile',
                         type: 'POST',
                         data: {
-                            oldPath: encodeURIComponent(item.relativePath),
+                            oldPath: item.initPath,
                             newName: data.filename
                         },
                         success: function (resp) {
@@ -174,7 +174,6 @@ define([''], function () {
 
             // 移动
             $scope.moveFile = function (item, index) {
-                var oldPath = item.relativePath;
 
                 var refactorModal = $uibModal.open({
                     animation: true,
@@ -184,14 +183,13 @@ define([''], function () {
                 });
 
                 refactorModal.result.then(function (data) {
-                    console.log(data);
 
                     $.ajax({
                         url: '/changeFilePath',
                         type: 'POST',
                         data: {
-                            oldPath: encodeURIComponent(oldPath),
-                            newPath: encodeURIComponent(data)
+                            oldPath: item.initPath,
+                            newPath: data
                         },
                         success: function (resp) {
                             if (resp == 'success') {
