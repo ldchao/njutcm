@@ -14,6 +14,9 @@ public interface TaskDao extends JpaRepository<TaskEntity,Serializable> {
 
     List<TaskEntity> findAllByUserOrderByStartAtDesc(String user);
 
+//    List<TaskEntity> findAllByUserAndTaskNameLikeOrderByStartAtDesc(String user,String taskName);
+    List<TaskEntity> findAllByUserAndTaskNameContainsOrderByStartAtDesc(String user,String taskName);
+
 //    @Query("Select count(*) from TaskEntity t where t.user = ?1 and t.taskName = ?2")
     int countByUserEqualsAndTaskNameEquals(String user,String taskName);
 }

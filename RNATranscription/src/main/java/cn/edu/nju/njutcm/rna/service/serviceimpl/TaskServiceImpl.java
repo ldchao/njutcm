@@ -77,6 +77,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TaskVO> searchTask(String username, String keyWord) {
+        List<TaskEntity> taskEntityList=taskDao.findAllByUserAndTaskNameContainsOrderByStartAtDesc(username,keyWord);
+        List<TaskVO> result=new ArrayList<TaskVO>();
+        for (TaskEntity taskEntity:taskEntityList) {
+            TaskVO taskVO=new TaskVO();
+            taskVO.update(taskEntity);
+            result.add(taskVO);
+        }
+        return result;
+    }
+
+    @Override
     public TaskEntity getTaskEntityById(Integer id) {
         return taskDao.findOne(id);
     }

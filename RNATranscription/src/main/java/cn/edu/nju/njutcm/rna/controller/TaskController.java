@@ -52,6 +52,13 @@ public class TaskController {
         return taskService.getAllTaskByUser(userVO.getUsername());
     }
 
+    //根据任务名是否包含关键字获取所有任务列表
+    @GetMapping("/searchTask")
+    public List<TaskVO> searchTask(HttpServletRequest request,String keyWord){
+        UserVO userVO = (UserVO) request.getSession().getAttribute("User");
+        return taskService.searchTask(userVO.getUsername(),keyWord);
+    }
+
     /**
      * 1-fastQC
      * ##命令行：sh fastqc.sh 1.txt 1 24

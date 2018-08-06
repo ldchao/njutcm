@@ -31,7 +31,8 @@ public class RnaApplicationTests {
 	@Test
 	public void contextLoads() {
 //		System.out.println(fileService.getByUser("test").size());
-		userService.addUser("admin","123");
+//		userService.addUser("admin","123");
+
 	}
 
 	@Test
@@ -39,8 +40,15 @@ public class RnaApplicationTests {
 		List<TaskVO> list=taskService.getAllTaskByUser("admin");
 		for (TaskVO t:
 			 list) {
-			System.out.println(t.getStatus());
+			System.out.println(t.getTaskName());
 		}
+		System.out.println("***********************");
+		list=taskService.searchTask("admin","3");
+		for (TaskVO t:
+				list) {
+			System.out.println(t.getTaskName());
+		}
+
 
 	}
 

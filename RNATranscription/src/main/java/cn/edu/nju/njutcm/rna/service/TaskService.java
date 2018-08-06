@@ -25,6 +25,9 @@ public interface TaskService {
     //获取所有任务列表
     public List<TaskVO> getAllTaskByUser(String username);
 
+    //根据关键字搜索所有任务列表
+    public List<TaskVO> searchTask(String username,String keyWord);
+
     //根据id获取结果文件路径
     public TaskEntity getTaskEntityById(Integer id);
 
