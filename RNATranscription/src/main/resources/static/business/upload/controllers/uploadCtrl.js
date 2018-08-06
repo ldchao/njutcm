@@ -241,7 +241,7 @@ define([''], function () {
 
             $scope.search = function () {
                 $scope.fileList = FILE_DATA.filter(function (item) {
-                    return (item.name.indexOf($scope.key) > -1 || item.type.indexOf($scope.key) > -1);
+                    return (item.fileName.indexOf($scope.key) > -1 || item.uploadAt_f.indexOf($scope.key) > -1);
                 });
             };
 
