@@ -107,6 +107,39 @@ define([], function () {
                     }
                 })
             };
+
+            $scope.modPwd = function () {
+                var modModal = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'framework/login/modPwd.html',
+                    controller: 'modPwdCtrl'
+                });
+
+                modModal.result.then(function (data) {
+                    $.ajax({
+                        url: '/changePassword',
+                        type: 'PUT',
+                        data: {
+                            newPassword: data.newPassword,
+                            oldPassword: data.oldPassword
+                        },
+                        success: function (resp) {
+                            if (resp == 'success') {
+                                commonService.showMessage($scope, 'success', "修改成功");
+                            } else {
+                                commonService.showMessage($scope, 'error', resp);
+                            }
+                            $("#logout").hide();
+                            toggle = false;
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+
+                });
+            }
         }];
 
     return topnavCtrl;

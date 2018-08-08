@@ -12,13 +12,14 @@ define(['ui-router/angular-ui-router',
         'framework/topnav/topnavCtrl',
         'framework/leftnav/leftnavCtrl',
         'framework/login/loginCtrl',
+        'framework/login/modPwdCtrl',
         'framework/confirm/confirmCtrl',
         'business/application/configures/appRouterConfig',
         'business/upload/configures/uploadRouterConfig',
         'business/task/configures/taskRouterConfig',
         'business/backend/configures/backendRouterConfig'
     ],
-    function (router, commonService, topnavCtrl, leftnavCtrl, loginCtrl, confirmCtrl,
+    function (router, commonService, topnavCtrl, leftnavCtrl, loginCtrl, modPwdCtrl, confirmCtrl,
               appRouterConfig, uploadRouterConfig, taskRouterConfig, backendRouterConfig) {
         'use strict';
 
@@ -43,6 +44,7 @@ define(['ui-router/angular-ui-router',
         framework.controller('topnavCtrl', topnavCtrl);
         framework.controller('leftnavCtrl', leftnavCtrl);
         framework.controller('loginCtrl', loginCtrl);
+        framework.controller('modPwdCtrl', modPwdCtrl);
 
         // 确认框
         framework.controller('confirmCtrl', confirmCtrl);

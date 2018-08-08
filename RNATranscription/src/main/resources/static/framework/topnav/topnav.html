@@ -25,9 +25,15 @@
             {{hasLogin()}} <span class="caret"></span>
         </div>
 
-        <div id="logout" class="logout_btn" ng-click="logout()">
-            <i class="fa fa-sign-out-alt"></i>
-            登出
+        <div id="logout">
+            <div class="logout_btn" ng-click="logout()">
+                <i class="fa fa-sign-out-alt"></i>
+                登出
+            </div>
+            <div class="logout_btn" ng-click="modPwd()">
+                <i class="fa fa-pencil-alt"></i>
+                修改密码
+            </div>
         </div>
     </div>
 </nav>
@@ -61,19 +67,23 @@
         margin-top: 0;
     }
 
-    .logout_btn {
-        width: 70px;
-        height: 35px;
-        line-height: 35px;
-        text-align: center;
-        background-color: #fff;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+    #logout {
         position: absolute;
         right: 0;
         top: 45px;
         z-index: 1000;
-        cursor: pointer;
         display: none;
+    }
+
+    .logout_btn {
+        width: 90px;
+        height: 35px;
+        line-height: 35px;
+        text-align: left;
+        padding-left: 8px;
+        background-color: #fff;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
     }
 
     .logout_btn:hover {

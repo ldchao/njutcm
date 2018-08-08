@@ -43,7 +43,7 @@ define([''], function () {
                         },
                         success: function (resp) {
                             if (resp == 'success') {
-                                $scope.userList.push(data)
+                                $scope.userList.push(data);
                             } else {
                                 commonService.showMessage($scope, 'error', resp);
                             }
@@ -79,7 +79,7 @@ define([''], function () {
                         })
                     }
                 });
-            }
+            };
 
         }];
 

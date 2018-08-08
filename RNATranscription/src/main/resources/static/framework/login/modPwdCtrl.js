@@ -5,13 +5,13 @@
 define([''], function () {
     'use strict';
 
-    var addCtrl = ['$scope', '$uibModalInstance', 'commonService',
+    var modPwdCtrl = ['$scope', '$uibModalInstance', 'commonService',
         function ($scope, $uibModalInstance, commonService) {
 
             $scope.data = {
-                username: '',
-                password: '',
-                password2: ''
+                oldPassword: '',
+                newPassword: '',
+                newPassword2: ''
             };
 
             $scope.cancel = function () {
@@ -20,17 +20,17 @@ define([''], function () {
 
             $scope.ok = function () {
 
-                if (!$scope.data.username) {
-                    commonService.showMessage($scope, 'error', '请输入用户名');
+                if (!$scope.data.oldPassword) {
+                    commonService.showMessage($scope, 'error', '请输入原密码');
                     return;
                 }
 
-                if (!$scope.data.password) {
-                    commonService.showMessage($scope, 'error', '请输入密码');
+                if (!$scope.data.newPassword) {
+                    commonService.showMessage($scope, 'error', '请输入新密码');
                     return;
                 }
 
-                if ($scope.data.password !== $scope.data.password2) {
+                if ($scope.data.newPassword !== $scope.data.newPassword2) {
                     commonService.showMessage($scope, 'error', '两次密码不一致');
                     return;
                 }
@@ -40,7 +40,5 @@ define([''], function () {
 
         }];
 
-    var backendModule = angular.module('backend.config');
-    backendModule.controller('addCtrl', addCtrl);
-
+    return modPwdCtrl;
 });
